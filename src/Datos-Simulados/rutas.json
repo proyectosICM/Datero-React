@@ -1,0 +1,40 @@
+{
+    "monitoreo":[
+        {
+            "id": 1,
+            "placa":"ABC-123",
+            "tpruta":-20,
+            "direccion":"IDA",
+            "ruta": "ATE → SAN MIGUEL"
+        },
+        {
+            "id":2,
+            "placa":"ABC-456",
+            "tpruta":-15,
+            "direccion":"IDA",
+            "ruta": "ATE → SAN MIGUEL"
+        },
+        {
+            "id":3,
+            "placa":"ABC-789",
+            "tpruta":-10,
+            "direccion":"IDA",
+            "ruta": "ATE → SAN MIGUEL"
+        },
+        {
+            "id":4,
+            "placa":"ABC-012",
+            "tpruta":18,
+            "direccion":"IDA",
+            "ruta": "ATE → SAN MIGUEL"
+        }
+        ,
+        {
+            "id":5,
+            "placa":"ABC-013",
+            "tpruta":18,
+            "direccion":"VUELTA",
+            "ruta": "SAN Miguel → ATE"
+        }
+    ]
+}
