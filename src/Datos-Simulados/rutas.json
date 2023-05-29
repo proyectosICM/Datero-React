@@ -34,7 +34,15 @@
             "placa":"ABC-013",
             "tpruta":18,
             "direccion":"VUELTA",
-            "ruta": "SAN Miguel → ATE"
+            "ruta": "SAN MIGUEL → ATE"
+        }
+        ,
+        {
+            "id":6,
+            "placa":"ABC-DF3",
+            "tpruta":25,
+            "direccion":"VUELTA",
+            "ruta": "SAN MIGUEL → ATE"
         }
     ]
 }

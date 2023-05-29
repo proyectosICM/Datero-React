@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import '../../Estilos/barnavP.css';
-import logo from '../Imagenes/logo_icm3.png';
+import logo from '../../Imagenes/logo_icm3.png';
 
 export function NavbarP(){
     return(

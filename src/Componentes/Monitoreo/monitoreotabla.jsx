@@ -3,16 +3,14 @@ import '../../Estilos/monitoreotabla.css'
 import { Table } from "react-bootstrap";
 import datos from '../../Datos-Simulados/rutas.json';
 
-export function MonitoreoTabla(){
-    const ida = datos.monitoreo.filter(item => item.direccion === "IDA");
+export function MonitoreoTabla({dir}){
+    const idir = datos.monitoreo.filter(item => item.direccion === dir);
 
     return(
         <div className="container-montabla">
-            <h1>{ida.length > 0 ? ida[0].direccion: ""}</h1>
+            <h1>{idir.length > 0 ? idir[0].direccion: ""}</h1>
             <div className="ruta">
-                <h5>Ate</h5>
-                <h5>→</h5>
-                <h5>San Miguel</h5>
+                <h5>{idir.length > 0 ? idir[0].ruta: ""}</h5>
             </div>
             <div className="tabla">
                 <Table striped bordered hover>
@@ -21,7 +19,7 @@ export function MonitoreoTabla(){
                         <th>TIEMPO</th>
                     </thead>
                     <tbody>
-                        {ida.map((item) => (
+                        {idir.map((item) => (
                             <tr key={item.id}>
                                 <td>{item.placa}</td>
                                 <td>{item.tpruta}</td>
