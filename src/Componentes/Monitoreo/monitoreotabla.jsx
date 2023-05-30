@@ -3,7 +3,7 @@ import '../../Estilos/monitoreotabla.css'
 import { Table } from "react-bootstrap";
 import datos from '../../Datos-Simulados/rutas.json';
 
-export function MonitoreoTabla({dir}){
+export function MonitoreoTabla({dir,rut}){
     const idir = datos.monitoreo.filter(item => item.direccion === dir);
 
     return(

@@ -5,6 +5,7 @@
             "placa":"ABC-123",
             "tpruta":-20,
             "direccion":"IDA",
+            "tipr":"1",
             "ruta": "ATE → SAN MIGUEL"
         },
         {
@@ -12,6 +13,7 @@
             "placa":"ABC-456",
             "tpruta":-15,
             "direccion":"IDA",
+            "tipr":"1",
             "ruta": "ATE → SAN MIGUEL"
         },
         {
@@ -19,6 +21,7 @@
             "placa":"ABC-789",
             "tpruta":-10,
             "direccion":"IDA",
+            "tipr":1,
             "ruta": "ATE → SAN MIGUEL"
         },
         {
@@ -26,6 +29,7 @@
             "placa":"ABC-012",
             "tpruta":18,
             "direccion":"IDA",
+            "tipr":1,
             "ruta": "ATE → SAN MIGUEL"
         }
         ,
@@ -34,6 +38,7 @@
             "placa":"ABC-013",
             "tpruta":18,
             "direccion":"VUELTA",
+            "tipr":2,
             "ruta": "SAN MIGUEL → ATE"
         }
         ,
@@ -42,6 +47,15 @@
             "placa":"ABC-DF3",
             "tpruta":25,
             "direccion":"VUELTA",
+            "tipr":2,
+            "ruta": "SAN MIGUEL → ATE"
+        }  ,
+        {
+            "id":7,
+            "placa":"ABC-DF3",
+            "tpruta":25,
+            "direccion":"VUELTA",
+            "tipr":2,
             "ruta": "SAN MIGUEL → ATE"
         }
     ]

@@ -6,8 +6,8 @@ export function Monitoreo(){
     return(
         <div className="container-monitoreo"> 
             <h1>Monitoreo de vehículos</h1>
-            <MonitoreoTabla dir="IDA" />
-            <MonitoreoTabla dir="VUELTA" />
+            <MonitoreoTabla dir="IDA" rut="1" />
+            <MonitoreoTabla dir="VUELTA" rut={1}/>
         </div>
     );
 }
