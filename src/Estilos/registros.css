@@ -1,0 +1,52 @@
+.container-registros{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    padding: 2%;
+    width: 80%;
+    margin: 2% auto;
+    border: 2px solid black;
+    border-radius: 2%;
+}
+
+.inp{
+    width: 20%;
+    margin: auto;
+    padding: 2%;
+}
+
+.imcrud{
+    width: 30%;
+    height: 30%;
+    border: 2px solid black;
+    border-radius: 2%;
+    padding: 2%;
+    margin: 2%;
+    display: flex;
+    flex-direction: column;
+}
+
+.container-crud{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    padding: 2%;
+    width: 80%;
+    margin: 2% auto;
+    border: 2px solid black;
+    border-radius: 2%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.icon-class{
+    font-size: 50px;
+    margin: 2%;
+    text-align: center;
+    justify-content: center;
+}
+
+.btn-l{
+    width: 100%;
+}

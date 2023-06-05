@@ -11,4 +11,5 @@ h5{
 .tabla{
     width: 50%;
     margin: auto;
+    border: 0.5px solid black
 }
