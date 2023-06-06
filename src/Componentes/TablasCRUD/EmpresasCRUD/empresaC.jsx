@@ -1,121 +1,39 @@
-import axios from "axios";
-import React, { useCallback, useEffect, useState } from "react";
-import { Button, Table } from "react-bootstrap";
-import { EmpresaModal } from "./empresaModal";
-
+import React, {  useState } from "react";
+import { Button} from "react-bootstrap";
+import { EmpresasT } from "./empresasT";
+import { EmpresasH } from "./empresasH";
+import { EmpresasD } from "./empresasD";
 export function EmpresasC(){
 
-    const [datos,setDatos] = useState([]);
-    const [showModal, setShowModal] = useState(false);
-    const [datosEdit,setDatosEdit] = useState(null);
+    const [mostrartabla, setMostrarTabla] = useState(true)
+    const [tablaSeleccionada, setTablaSeleccionada] = useState("Todas");
 
-    const ListarDatos = useCallback(async() => {
-        const results = await axios.get('http://localhost:8080/api/empresa');
-        setDatos(results.data);
-        console.log(datos);
-    },[]);
-
-    useEffect(() => {
-        ListarDatos();
-    }, [ListarDatos]);
-
-    const agregarEmpresa = (empresa) => {
-        axios.post('http://localhost:8080/api/empresa', empresa)
-        .then(()=>{
-            closeModal();
-            ListarDatos();
-        })
-    };
-
-    const editarEmpresa = (empresa) => {
-        console.log(empresa)
-        axios.put(`http://localhost:8080/api/empresa/${empresa.id_emp}`, empresa)
-        .then(()=>{
-            closeModal();
-            ListarDatos();
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-    };
-
-    const habilitarEmpresa = (id) => {
-        axios
-          .get(`http://localhost:8080/api/empresa/${id}`)
-          .then((response) => {
-            const empresa = response.data;
-            empresa.est_emp = true;
-            axios
-              .put(`http://localhost:8080/api/empresa/${id}`, empresa)
-              .then(() => {
-                ListarDatos();
-              });
-          });
-      };
-
-    const deshabilitarEmpresa = (id) => {
-        axios
-          .get(`http://localhost:8080/api/empresa/${id}`)
-          .then((response) => {
-            const empresa = response.data;
-            empresa.est_emp = false;
-            axios
-              .put(`http://localhost:8080/api/empresa/${id}`, empresa)
-              .then(() => {
-                ListarDatos();
-              });
-          });
-      };
-
-    const edit = (empresa) =>{
-        setDatosEdit(empresa);
-        setShowModal(true);
-    };
-
-    const openModal = () => {
-        setShowModal(true);
-    };
-
-    const closeModal = () => {
-        setShowModal(false);
-    };
-
-
-
-
+    const handleMostrarTabla = (tabla) => {
+        setTablaSeleccionada(tabla);
+        setMostrarTabla(true);
+    }
     return (
-        <div className="container-crud" >
-            <Button variant='success' onClick={openModal}>+</Button>
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>NOMBRE</th>
-                        <th>ESTADO</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {datos.map((dato) => (
-                        <tr key={dato.id_emp}>
-                            <td>{dato.id_emp}</td>
-                            <td>{dato.nom_emp}</td>
-                            <td>{dato.est_emp ? "Habilitado" : "Deshabilitado"}</td>
-                            <td>
-                                <Button variant="success" onClick={() => edit(dato)}>Editar</Button>
-                                <Button variant="primary" onClick={() => habilitarEmpresa (dato.id_emp)}>Habilitar</Button>
-                                <Button variant="warning" onClick={() => deshabilitarEmpresa (dato.id_emp)}>Deshabilitar</Button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
-            <EmpresaModal 
-                show={showModal}
-                close={closeModal}
-                agregar={agregarEmpresa}
-                datosaeditar={datosEdit}
-                editar={editarEmpresa}
-            />
+        <div>
+            <Button onClick={() => handleMostrarTabla("Habilitadas")}>Empresas Habilitadas</Button>
+            <Button onClick={() => handleMostrarTabla("Deshabilitadas")}>Empresas Deshabilitadas</Button>
+            <Button onClick={() => handleMostrarTabla("Todas")}>Ver todas las Empresas</Button>
+
+            <div className="container-crud" >
+                {mostrartabla && (
+                    <>
+                        {tablaSeleccionada === "Habilitadas" && (
+                            <EmpresasH />
+                        )}
+                        {tablaSeleccionada === "Deshabilitadas" && (
+                            <EmpresasD />
+                        )}
+                        {tablaSeleccionada === "Todas" && (
+                            <EmpresasT />
+                        )}
+                    </>
+
+                )}
+            </div>
         </div>
     );
 }

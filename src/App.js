@@ -8,6 +8,11 @@ import { Registros } from './Componentes/Registros/registros';
 import { ListadoVehiculos } from './listadovehiculos';
 import { MenuCRUD } from './Componentes/TablasCRUD/menuCRUD';
 import { EmpresasC } from './Componentes/TablasCRUD/EmpresasCRUD/empresaC';
+import { MenuEBuses } from './Componentes/TablasCRUD/BusesCRUD/menuEBuses';
+import { BusesC } from './Componentes/TablasCRUD/BusesCRUD/BusesC';
+
+
+
 
 
 function App() {
@@ -24,6 +29,8 @@ function App() {
         <Route exact path='/registros' element={<Registros />}/>
         <Route exact path='/menuCRUD' element={<MenuCRUD />}/>
         <Route exact path='/empresasCRUD' element={<EmpresasC />}/>
+        <Route exact path='/menuBuses' element={<MenuEBuses />}/>
+        <Route exact path='/busesxemp/:id_emp' element={<BusesC />}/>
       </Routes>
     </Router>
 

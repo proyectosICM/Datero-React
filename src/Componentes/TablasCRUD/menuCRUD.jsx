@@ -13,12 +13,11 @@ export function MenuCRUD(){
 
     const tablas = ["Empresas", "Buses", "Trabajadores", "Rutas", "Distritos", "Paraderos"];
     const iconos = [BsBuildingsFill,BsFillBusFrontFill,BsPersonVcard,FaMapSigns,TbBusStop,SiGooglemaps]
-    const rutas = ['/empresasCRUD', '/busesCRUD', '/trabajadoresCRUD', '/rutasCRUD', '/distritosCRUD', '/paraderosCRUD']
+    const rutas = ['/empresasCRUD', '/menuBuses', '/trabajadoresCRUD', '/rutasCRUD', '/distritosCRUD', '/paraderosCRUD']
     return (
         <div className="container-crud">
             {tablas.map((tabla, index) => (
                 <div className="imcrud">
-
                     <h1>Administrar {tabla}</h1>
                     <span>Crear, Editar y eliminar {tabla}</span>
                     <div>
