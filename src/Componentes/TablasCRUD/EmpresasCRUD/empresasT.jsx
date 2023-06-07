@@ -100,8 +100,18 @@ export function EmpresasT(){
                                 <td>{dato.est_emp ? "Habilitado" : "Deshabilitado"}</td>
                                 <td>
                                     <Button variant="success" onClick={() => edit(dato)}>Editar</Button>
-                                    <Button variant="primary" onClick={() => habilitarEmpresa (dato.id_emp)}>Habilitar</Button>
-                                    <Button variant="warning" onClick={() => deshabilitarEmpresa (dato.id_emp)}>Deshabilitar</Button>
+                                    <Button
+                                    variant = {dato.est_emp ? "warning":"primary"}
+                                    onClick={()=> {
+                                        if(dato.est_emp){
+                                            deshabilitarEmpresa(dato.id_emp)
+                                        } else {
+                                            habilitarEmpresa(dato.id_emp)
+                                        }
+                                    }}
+                                    >
+                                       {dato.est_emp ? "Deshabilitar" : "Habilitar"}
+                                    </Button>
                                 </td>
                             </tr>
                         ))}

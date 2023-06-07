@@ -6,7 +6,7 @@ import { EmpresasD } from "./empresasD";
 export function EmpresasC(){
 
     const [mostrartabla, setMostrarTabla] = useState(true)
-    const [tablaSeleccionada, setTablaSeleccionada] = useState("Todas");
+    const [tablaSeleccionada, setTablaSeleccionada] = useState("Habilitadas");
 
     const handleMostrarTabla = (tabla) => {
         setTablaSeleccionada(tabla);
@@ -14,11 +14,12 @@ export function EmpresasC(){
     }
     return (
         <div>
+
+            <div className="container-crud" >
             <Button onClick={() => handleMostrarTabla("Habilitadas")}>Empresas Habilitadas</Button>
             <Button onClick={() => handleMostrarTabla("Deshabilitadas")}>Empresas Deshabilitadas</Button>
             <Button onClick={() => handleMostrarTabla("Todas")}>Ver todas las Empresas</Button>
 
-            <div className="container-crud" >
                 {mostrartabla && (
                     <>
                         {tablaSeleccionada === "Habilitadas" && (
