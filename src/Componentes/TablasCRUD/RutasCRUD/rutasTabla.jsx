@@ -15,6 +15,32 @@ export function RutasTabla({url}){
         ListarDatos();
     },[ListarDatos]);
 
+    const habilitarRuta = (id) => {
+        axios.get(`http://localhost:8080/api/rutas/${id}`)
+            .then((response) => {
+                const rutas = response.data;
+                rutas.est_ruta = true;
+                axios
+                    .put(`http://localhost:8080/api/rutas/${id}`, rutas)
+                    .then(() => {
+                        ListarDatos();
+                    });
+            });
+    };
+
+    const deshabilitarRuta = (id) => {
+        axios.get(`http://localhost:8080/api/rutas/${id}`)
+            .then((response) => {
+                const rutas = response.data;
+                rutas.est_ruta = false;
+                axios
+                    .put(`http://localhost:8080/api/rutas/${id}`, rutas)
+                    .then(() => {
+                        ListarDatos();
+                    });
+            });
+    };
+
     return(
         <>
             <Table striped bordered hover>
@@ -38,9 +64,9 @@ export function RutasTabla({url}){
                                     variant={dato.est_ruta ? "warning" : "primary"}
                                     onClick={() => {
                                         if (dato.est_ruta) {
-
+                                            deshabilitarRuta(dato.id_ruta)
                                         } else {
-
+                                            habilitarRuta(dato.id_ruta)
                                         }
                                     }}
                                 >

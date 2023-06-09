@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { DistritoTabla } from "./distritoTabla";
-import { useResolvedPath } from "react-router-dom";
 
 export function DistritoC(){
 

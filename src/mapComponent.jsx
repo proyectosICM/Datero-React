@@ -1,8 +1,8 @@
 import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
 
 export function MapComponent() {
-  const position = [51.505, -0.09];
+  //const position = [51.505, -0.09];
   return (
     <div className="container-registros">
       <MapContainer

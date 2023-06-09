@@ -7,6 +7,7 @@ import { Button } from "react-bootstrap";
 export function BusesC(){
 
     const {id_emp} = useParams();
+    
     const urlT = `http://localhost:8080/api/buses/busxempT/${id_emp}`;
     const urlH = `http://localhost:8080/api/buses/busxempH/${id_emp}`;
     const urlD = `http://localhost:8080/api/buses/busxempD/${id_emp}`;

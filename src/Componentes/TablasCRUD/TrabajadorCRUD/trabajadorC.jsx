@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TrabajadorTabla } from "./trabajadorTabla";
-import { useParams, useRevalidator } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
 export function TrabajadorC(){
