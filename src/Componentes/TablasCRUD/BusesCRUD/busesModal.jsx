@@ -6,40 +6,35 @@ import { Button, Form, Modal} from "react-bootstrap";
 export function BusesModal({show, close,datosaeditar,editar,agregar, emp}){
 
     const [trabajadores, setTrabajadores] = useState([]);
-    const [selectedTrabajador, setSelectedTrabajador] = useState([]);
+    const [selectedTrabajador, setSelectedTrabajador] = useState(null);
     const [rutas, setRutas] = useState([]);
-    const [seletedRuta, setSeletedRuta] = useState([]);
+    const [seletedRuta, setSeletedRuta] = useState(null);
 
     const ListarTrabajadores = useCallback(async() => {
-        const trabajadores = await axios.get(`http://localhost:8080/api/trabajadores/trabajadoresxEmpR/${emp}/${1}/${2}`);
-        setTrabajadores(trabajadores.data);
+        const response = await axios.get(`http://localhost:8080/api/trabajadores/trabajadoresxEmpR/${emp}/${1}/${2}`);
+        setTrabajadores(response.data);
     },[emp]);
 
     const ListarRutas = useCallback(async() => {
-        const rutas = await axios.get(`http://localhost:8080/api/rutas/rutasXEmpH/${emp}`);
-        setRutas(rutas.data);
+        const response = await axios.get(`http://localhost:8080/api/rutas/rutasXEmpH/${emp}`);
+        setRutas(response.data);
     },[emp]);
 
-    const [formData,setFormData] = useState({
+    const [formData, setFormData] = useState({
         mod_bus: "",
         placa_bus: "",
         est_bus: true,
-        trabajadoresModel: {
-            id_tra: selectedTrabajador
-        },
-        empresasModel: {
-            id_emp: {emp}
-        },
-        rutasModel: {
-            id_ruta: seletedRuta
-        }
-    });
+        trabajadoresModel: null,
+        empresasModel: emp,
+        rutasModel: null
+      });
+      
 
     useEffect(()=>{
         if(datosaeditar){
             setFormData(datosaeditar);
         } else {
-
+            limpiar();
         }
         ListarTrabajadores();
         ListarRutas();
@@ -70,8 +65,8 @@ export function BusesModal({show, close,datosaeditar,editar,agregar, emp}){
                     <Form onSubmit={handleSubmit}>
                         <Form.Label>Ruta</Form.Label>
                         <Form.Select 
-                            value={seletedRuta}
                             name="ruta"
+                            value={formData.rutasModel}
                             onChange={(e) => setSeletedRuta(e.target.value)}
                         >
                             {rutas.map((ruta) => (
@@ -103,8 +98,14 @@ export function BusesModal({show, close,datosaeditar,editar,agregar, emp}){
 
                         <Form.Label>Conductor</Form.Label>
                         <Form.Select
-                            value={selectedTrabajador}
-                            onChange={(e) => setSelectedTrabajador(e.target.value)}
+                            value={formData.trabajadoresModel ? formData.trabajadoresModel.id_tra : ""}
+                            onChange={(e) => {
+                                const selectedId = e.target.value;
+                                const selectedWorker = trabajadores.find(
+                                    (worker) => worker.id_tra === selectedId
+                                );
+                                setFormData({ ...formData, trabajadoresModel: selectedWorker });
+                            }}
                         >
                             {trabajadores.map((trabajador) => (
                                 <option key={trabajador.id_tra} value={trabajador.id_tra}>
