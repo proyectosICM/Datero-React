@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { TrabajadorModal } from "./trabajadorModal";
 
-export function TrabajadorTabla({url}){
+export function TrabajadorTabla({url, il}){
 
     const [datos, setDatos] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -19,7 +19,22 @@ export function TrabajadorTabla({url}){
     },[ListarDatos]);
 
     const agregarTrabajador = (trabajador) => {
-        axios.post('http://localhost:8080/api/trabajador/', trabajador)
+        console.log(trabajador)
+        const requestData = {
+            nom_tra: trabajador.nom_tra,
+            ape_tra: trabajador.ape_tra,
+            dni_tra: trabajador.dni_tra,
+            empresasModel: {
+              id_emp: trabajador.empresasModel
+            },
+            user_tra: trabajador.user_tra,
+            pass_tra: trabajador.pass_tra,
+            rolesModel: {
+                id_emp: trabajador.rolesModel
+            },
+            est_tra: trabajador.est_tra
+          };
+        axios.post('http://localhost:8080/api/trabajadores', requestData)
         .then(()=>{
             closeModal();
             ListarDatos();
@@ -42,13 +57,13 @@ export function TrabajadorTabla({url}){
 
     const habilitarTrabajador = (id) => {
         axios
-            .get(`http://localhost:8080/api/trabajador/${id}`)
+            .get(`http://localhost:8080/api/trabajadores/${id}`)
             .then((response) => {
                 const trabajador = response.data;
-                trabajador.usuariosModel.est_usu = true;
+                trabajador.est_tra = true;
                 
                 axios
-                    .put(`http://localhost:8080/api/trabajador/${id}`, trabajador)
+                    .put(`http://localhost:8080/api/trabajadores/${id}`, trabajador)
                     .then(() => {
                         ListarDatos();
                     });
@@ -57,12 +72,12 @@ export function TrabajadorTabla({url}){
 
     const deshabilitarTrabajador = (id) => {
         axios
-            .get(`http://localhost:8080/api/trabajador/${id}`)
+            .get(`http://localhost:8080/api/trabajadores/${id}`)
             .then((response) => {
                 const trabajador = response.data;
-                trabajador.usuariosModel.est_usu = false;
+                trabajador.est_tra = false;
                 axios
-                    .put(`http://localhost:8080/api/trabajador/${id}`, trabajador)
+                    .put(`http://localhost:8080/api/trabajadores/${id}`, trabajador)
                     .then(() => {
                         ListarDatos();
                     });
@@ -89,14 +104,17 @@ export function TrabajadorTabla({url}){
             <Button variant="success" onClick={openModal}> + </Button>
             <Table striped bordered hover>
                 <thead>
-                    <th>ID</th>
-                    <th>NOMBRE</th>
-                    <th>DNI</th>
-                    <th>EMPRESA</th>
-                    <th>NOMBRE DE USUARIO</th>
-                    <th>CONTRASEÑA</th>
-                    <th>ESTADO</th>
-                    <th>GESTION</th>
+                    <tr>
+                        <th>ID</th>
+                        <th>NOMBRE</th>
+                        <th>DNI</th>
+                        <th>EMPRESA</th>
+                        <th>NOMBRE DE USUARIO</th>
+                        <th>CONTRASEÑA</th>
+                        <th>ESTADO</th>
+                        <th>ROL</th>
+                        <th>GESTION</th>
+                    </tr>
                 </thead>
                 <tbody>
                     {datos.map((dato) => (
@@ -105,22 +123,23 @@ export function TrabajadorTabla({url}){
                             <td>{dato.nom_tra} {dato.ape_tra}</td>
                             <td>{dato.dni_tra}</td>
                             <td>{dato.empresasModel.nom_emp}</td>
-                            <td>{dato.usuariosModel.user_usu}</td>
-                            <td>{dato.usuariosModel.pass_usu}</td>
-                            <td>{dato.usuariosModel.est_usu ? "Habilitado" : "Deshabilitado"}</td>
+                            <td>{dato.user_tra}</td>
+                            <td>{dato.pass_tra}</td>
+                            <td>{dato.rolesModel.nom_rol}</td>
+                            <td>{dato.est_tra ? "Habilitado" : "Deshabilitado"}</td>
                             <td>
-                                <Button variant="success" onClick={() => edit}>Editar</Button>
+                                <Button variant="success" onClick={() => edit(dato)}>Editar</Button>
                                 <Button
-                                    variant={dato.usuariosModel.est_usu ? "warning" : "primary"}
+                                    variant={dato.est_tra ? "warning" : "primary"}
                                     onClick={() => {
-                                        if (dato.usuariosModel.est_usu) {
-                                            deshabilitarTrabajador(dato.id_bus);
+                                        if (dato.est_tra) {
+                                            deshabilitarTrabajador(dato.id_tra);
                                         } else {
-                                            habilitarTrabajador(dato.id_bus);
+                                            habilitarTrabajador(dato.id_tra);
                                         }
                                     }}
                                 >
-                                    {dato.usuariosModel.est_usu ? "Deshabilitar" : "Habilitar"}
+                                    {dato.est_tra ? "Deshabilitar" : "Habilitar"}
                                 </Button>
                             </td>
                         </tr>
@@ -133,6 +152,7 @@ export function TrabajadorTabla({url}){
                 agregar={agregarTrabajador}
                 datosaeditar={datosEdit}
                 editar={editarTrabajador}
+                il={il}
             />
         </>
     );

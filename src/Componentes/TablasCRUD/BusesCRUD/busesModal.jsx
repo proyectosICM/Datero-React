@@ -118,9 +118,7 @@ export function BusesModal({show, close,datosaeditar,editar,agregar, emp}){
                             value={formData.placa_bus}
                             onChange={(e) => setFormData({ ...formData, placa_bus: e.target.value })}
                         />
-
-
-
+                        
                         <Form.Label>Conductor</Form.Label>
                         <Form.Select 
                             name="conductor"

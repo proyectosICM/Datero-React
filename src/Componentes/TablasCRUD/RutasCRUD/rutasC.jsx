@@ -23,13 +23,13 @@ export function RutasC(){
             <Button variant="primary" onClick={() => handleMostrarTabla("Todas")}>Mostrar Todas Las Rutas</Button>
 
             {tablaSeleccionada === "Habilitadas" && (
-                <RutasTabla url={urlH} />
+                <RutasTabla il={id_emp} url={urlH}/>
             )}
             {tablaSeleccionada === "Deshabilitadas" && (
-                <RutasTabla url={urlD} />
+                <RutasTabla il={id_emp} url={urlD} />
             )}
             {tablaSeleccionada === "Todas" && (
-                <RutasTabla url={urlT} />
+                <RutasTabla il={id_emp} url={urlT} />
             )}
         </div>
     );
