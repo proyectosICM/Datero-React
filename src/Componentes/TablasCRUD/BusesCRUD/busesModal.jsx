@@ -6,9 +6,8 @@ import { Button, Form, Modal} from "react-bootstrap";
 export function BusesModal({show, close,datosaeditar,editar,agregar, emp}){
 
     const [trabajadores, setTrabajadores] = useState([]);
-   // const [selectedTrabajador, setSelectedTrabajador] = useState(1);
     const [rutas, setRutas] = useState([]);
-    //const [seletedRuta, setSeletedRuta] = useState(1);
+    const [editando, setEditando] = useState(false);
 
     const ListarTrabajadores = useCallback(async() => {
         const response = await axios.get(`http://localhost:8080/api/trabajadores/trabajadoresxEmpR/${emp}/${1}/${2}`);
@@ -32,6 +31,7 @@ export function BusesModal({show, close,datosaeditar,editar,agregar, emp}){
     useEffect(()=>{
         if(datosaeditar){
             setFormData({...datosaeditar});
+            setEditando(true)
         } else {
             limpiar();
         }
@@ -41,17 +41,34 @@ export function BusesModal({show, close,datosaeditar,editar,agregar, emp}){
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if(datosaeditar){
-            editar(formData);
+        if (editando) {
+            const updatedFormData = { ...formData };
+            if (
+              updatedFormData.trabajadoresModel &&
+              typeof updatedFormData.trabajadoresModel === "object"
+            ) {
+              updatedFormData.trabajadoresModel = updatedFormData.trabajadoresModel.id_tra;
+            } else if (
+                updatedFormData.rutasModel &&
+                typeof updatedFormData.rutasModel === "object"
+              ) {
+                updatedFormData.rutasModel = updatedFormData.rutasModel.id_ruta;
+              }
+            editar(updatedFormData);
+            console.log(datosaeditar);
+            limpiar();
         } else {
             agregar(formData);
+            console.log(datosaeditar);
         }
         close();
         limpiar();
     }
 
     const limpiar = () => {
-        setFormData({ placa_bus: "", mod_bus: "", est_bus: true });
+        setFormData({ placa_bus: "", mod_bus: "", est_bus: true, trabajadoresModel:null, rutasModel:null });
+        //setFormData({ placa_bus: "", mod_bus: "", est_bus: true, trabajadoresModel:null, rutasModel:null });
+        setEditando(false);
     }
 
     return (

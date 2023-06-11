@@ -21,6 +21,7 @@ export function BusesTabla({il, url}) {
     },[ListarDatos]);
 
     const agregarBus = (bus) => {
+        console.log(bus);
         const requestData = {
             mod_bus: bus.mod_bus,
             placa_bus: bus.placa_bus,
@@ -35,7 +36,7 @@ export function BusesTabla({il, url}) {
               id_ruta: bus.rutasModel
             }
           };
-          console.log(bus);
+
           console.log(requestData);
         axios.post('http://localhost:8080/api/buses', requestData)
         .then(()=>{
