@@ -21,24 +21,22 @@ export function BusesTabla({il, url}) {
     },[ListarDatos]);
 
     const agregarBus = (bus) => {
-        console.log("xd");
-        console.log(bus.trabajadoresModel.id_tra);
-        console.log(bus.emp.id_tra);
         const requestData = {
             mod_bus: bus.mod_bus,
             placa_bus: bus.placa_bus,
             est_bus: bus.est_bus,
             trabajadoresModel: {
-              id_tra: bus.trabajadoresModel.id_tra
+              id_tra: bus.trabajadoresModel
             },
             empresasModel: {
-              id_emp: bus.empresasModel.id_emp
+              id_emp: il
             },
             rutasModel: {
-              id_ruta: bus.rutasModel.id_ruta
+              id_ruta: bus.rutasModel
             }
           };
-
+          console.log(bus);
+          console.log(requestData);
         axios.post('http://localhost:8080/api/buses', requestData)
         .then(()=>{
             closeModal();
@@ -50,25 +48,22 @@ export function BusesTabla({il, url}) {
     };
 
     const editarBus = (bus) => {
-        console.log("xd");
-        console.log(bus.trabajadoresModel.id_tra);
-        console.log(bus.empresasModel.id_emp);
-        console.log(bus.rutasModel.id_ruta);
         const requestData = {
             mod_bus: bus.mod_bus,
             placa_bus: bus.placa_bus,
             est_bus: bus.est_bus,
             trabajadoresModel: {
-              id_tra: bus.trabajadoresModel.id_tra
+              id_tra: bus.trabajadoresModel
             },
             empresasModel: {
-              id_emp: bus.empresasModel.id_emp
+              id_emp: il
             },
             rutasModel: {
-              id_ruta: bus.rutasModel.id_ruta
+              id_ruta: bus.rutasModel
             }
           };
-
+        console.log(bus);
+        console.log(requestData);
         axios.put(`http://localhost:8080/api/buses/${bus.id_bus}`, requestData)
         .then(()=>{
             closeModal();
@@ -76,6 +71,7 @@ export function BusesTabla({il, url}) {
         })
         .catch((error) => {
             console.log(error);
+            console.log(error.response);
         })
     };
 
