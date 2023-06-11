@@ -65,7 +65,7 @@ export function BusesModal({show, close,datosaeditar,editar,agregar, emp}){
                         <Form.Label>Ruta</Form.Label>
                         <Form.Select 
                             name="ruta"
-                            value={formData.rutasModel ? formData.rutasModel: ""}
+                            value={formData.rutasModel ? formData.rutasModel.id_ruta: ""}
                             onChange={(e) => {
                                 const selectedId = e.target.value;
                                 /*const selectedWorker = rutas.find(
@@ -107,7 +107,7 @@ export function BusesModal({show, close,datosaeditar,editar,agregar, emp}){
                         <Form.Label>Conductor</Form.Label>
                         <Form.Select 
                             name="conductor"
-                            value={formData.trabajadoresModel ? formData.trabajadoresModel: ""}
+                            value={formData.trabajadoresModel ? formData.trabajadoresModel.id_tra: ""}
                             onChange={(e) => {
                                 const selectedId = e.target.value;
                                 /*const selectedWorker = rutas.find(
