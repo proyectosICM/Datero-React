@@ -18,19 +18,18 @@ export function TrabajadorTabla({url, il}){
         ListarDatos();
     },[ListarDatos]);
 
-    const agregarTrabajador = (trabajador) => {
-        console.log(trabajador)
+    const agregarTrabajador = (trabajador) => { 
         const requestData = {
             nom_tra: trabajador.nom_tra,
             ape_tra: trabajador.ape_tra,
             dni_tra: trabajador.dni_tra,
-            empresasModel: {
-              id_emp: trabajador.empresasModel
-            },
             user_tra: trabajador.user_tra,
             pass_tra: trabajador.pass_tra,
+            empresasModel: {
+              id_emp: il
+            },
             rolesModel: {
-                id_emp: trabajador.rolesModel
+                id_rol: trabajador.rolesModel
             },
             est_tra: trabajador.est_tra
           };
@@ -45,7 +44,23 @@ export function TrabajadorTabla({url, il}){
     };
 
     const editarTrabajador = (trabajador) => {
-        axios.put(`http://localhost:8080/api/trabajador/${trabajador.id_bus}`, trabajador)
+        console.log(trabajador);
+        const requestData = {
+            nom_tra: trabajador.nom_tra,
+            ape_tra: trabajador.ape_tra,
+            dni_tra: trabajador.dni_tra,
+            user_tra: trabajador.user_tra,
+            pass_tra: trabajador.pass_tra,
+            empresasModel: {
+              id_emp: il
+            },
+            rolesModel: {
+                id_rol: trabajador.rolesModel
+            },
+            est_tra: trabajador.est_tra
+        };
+        console.log(requestData);
+        axios.put(`http://localhost:8080/api/trabajadores/${trabajador.id_tra}`, requestData)
         .then(()=>{
             closeModal();
             ListarDatos();

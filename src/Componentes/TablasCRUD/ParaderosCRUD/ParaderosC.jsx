@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
-import { DistritoTabla } from "./distritoTabla";
+import { DistritoTabla, ParaderosTabla } from "./ParaderosTabla";
 
-export function DistritoC(){
+export function ParaderosC(){
 
     const [tablaSeleccionada, setTablaSeleccionada] = useState("Habilitados");
     const h = 1;
     const d = 0;
-    const urlT = ("http://localhost:8080/api/distritos");
-    const urlH = (`http://localhost:8080/api/distritos/disH/${h}`);
-    const urlD = (`http://localhost:8080/api/distritos/disH/${d}`);
+    const urlT = ("http://localhost:8080/api/paraderos");
+    const urlH = (`http://localhost:8080/api/paraderos/parH/1`);
+    const urlD = (`http://localhost:8080/api/paraderos/parH/0`);
 
     const handleMostrarTabla = (tabla) =>{
         setTablaSeleccionada(tabla);
@@ -23,13 +23,13 @@ export function DistritoC(){
             <Button variant="primary" onClick={() => handleMostrarTabla("Todos")}>Mostrar Todos Los Distritos</Button>
 
             {tablaSeleccionada === "Habilitados" && (
-                <DistritoTabla url={urlH} />
+                <ParaderosTabla url={urlH} />
             )}
             {tablaSeleccionada === "Deshabilitados" && (
-                <DistritoTabla url={urlD} />
+                <ParaderosTabla url={urlD} />
             )}
             {tablaSeleccionada === "Todos" && (
-                <DistritoTabla url={urlT} />
+                <ParaderosTabla url={urlT} />
             )}
         </div>
     );

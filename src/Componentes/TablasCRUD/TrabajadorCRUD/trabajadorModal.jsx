@@ -11,7 +11,7 @@ export function TrabajadorModal({ show, close, datosaeditar, editar, agregar, il
         empresasModel: il,
         user_tra: "",
         pass_tra: "",
-        rolesModel: "",
+        rolesModel: null,
         est_tra: true
     });
     const [roles, setRoles] = useState([]);
@@ -40,9 +40,10 @@ export function TrabajadorModal({ show, close, datosaeditar, editar, agregar, il
             if (
                 updatedFormData.rolesModel &&
                 typeof updatedFormData.rolesModel === "object"
-            )
-                editar(updatedFormData);
-            console.log(datosaeditar);
+            ){
+                updatedFormData.rolesModel = updatedFormData.rolesModel.id_rol;
+            }
+            editar(updatedFormData);
             limpiar();
         } else {
             agregar(formData);
@@ -53,7 +54,7 @@ export function TrabajadorModal({ show, close, datosaeditar, editar, agregar, il
     }
 
     const limpiar = () => {
-        setFormData({ nom_tra: "", ape_tra: "", dni_tra: "", empresasModel: il, user_tra: "", pass_tra: "", rolesModel: "", est_tra: true });
+        setFormData({ nom_tra: "", ape_tra: "", dni_tra: "", empresasModel: il, user_tra: "", pass_tra: "", rolesModel: null, est_tra: true });
         setEditando(false);
     }
 
@@ -86,7 +87,7 @@ export function TrabajadorModal({ show, close, datosaeditar, editar, agregar, il
                         <Form.Label>DNI:</Form.Label>
                         <Form.Control
                             type="text"
-                            name="placa_bus"
+                            name="dni_tra"
                             placeholder="Placa"
                             value={formData.dni_tra}
                             onChange={(e) => setFormData({ ...formData, dni_tra: e.target.value })}
@@ -94,7 +95,7 @@ export function TrabajadorModal({ show, close, datosaeditar, editar, agregar, il
                         <Form.Label>Usuario:</Form.Label>
                         <Form.Control
                             type="text"
-                            name="placa_bus"
+                            name="user_tra"
                             placeholder="Placa"
                             value={formData.user_tra}
                             onChange={(e) => setFormData({ ...formData, user_tra: e.target.value })}
@@ -123,7 +124,7 @@ export function TrabajadorModal({ show, close, datosaeditar, editar, agregar, il
                         >
                             <option value={formData.rolesModel ? formData.rolesModel.id_rol : ""}>
                                 {formData.rolesModel ? formData.rolesModel.nom_rol
-                                    : "Seleccione una ruta"}
+                                    : "Seleccione un rol"}
                             </option>
                             {roles.map((rol) => (
                                 <option key={rol.id_rol} value={rol.id_rol}>

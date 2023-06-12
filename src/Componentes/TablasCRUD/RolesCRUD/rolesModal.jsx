@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 
-export function DistritoModal({show, close,datosaeditar,editar,agregar}){
+export function RolesModal({show, close,datosaeditar,editar,agregar}){
 
     const [formData,setFormData] = useState({
-        nom_dis: "",
-        est_dis: true
+        nom_rol: "",
+        est_rol: true
     });
 
     useEffect(()=>{
@@ -28,7 +28,7 @@ export function DistritoModal({show, close,datosaeditar,editar,agregar}){
     }
 
     const limpiar = () =>{
-        setFormData({ nom_dis: "", est_dis: true });
+        setFormData({ nom_rol: "", est_rol: true });
     }
 
 
@@ -36,22 +36,22 @@ export function DistritoModal({show, close,datosaeditar,editar,agregar}){
         <div>
             <Modal show={show} onHide={close}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Agregar Empresa</Modal.Title>
+                    <Modal.Title>Agregar Ruta</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleSubmit}>
-                        <Form.Label>Nombre de la empresa</Form.Label>
+                        <Form.Label>Nombre del rol</Form.Label>
                         <Form.Control 
                             type="text"
-                            name="nom_emp"
+                            name="nom_ruta"
                             placeholder="Nombre"
-                            value={formData.nom_dis}
-                            onChange={(e) => setFormData({ ...formData, nom_dis: e.target.value })}
+                            value={formData.nom_rol}
+                            onChange={(e) => setFormData({ ...formData, nom_rol: e.target.value })}
                         />
                         <Button type="submit">Crear</Button>
                         <Button variant="secondary" onClick={close}>Cerrar</Button>
                     </Form>
-
+            
                 </Modal.Body>
             </Modal>
         </div>

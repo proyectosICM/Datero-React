@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
-import { RutasModal } from "./rutasModal";
+import { Link } from "react-router-dom";
+import { RolesModal } from "./rolesModal";
 
-export function RutasTabla({ url, il }) {
+export function RolesTabla({ url }) {
 
     const [datos, setDatos] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -12,22 +13,26 @@ export function RutasTabla({ url, il }) {
     const ListarDatos = useCallback(async () => {
         const results = await axios.get(url);
         setDatos(results.data);
-    }, [url]);
+    }, []);
 
     useEffect(() => {
         ListarDatos();
     }, [ListarDatos]);
 
+    const agregarDistrito = (distrito) => {
+        axios.post(url, distrito)
+            .then(() => {
+                closeModal();
+                console.log(distrito);
+                ListarDatos();
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    };
 
-    const agregarBus = (ruta) => {
-        const requestData = {
-            nom_ruta: ruta.nom_ruta,
-            est_ruta: ruta.est_ruta,
-            empresasModel: {
-                id_emp: il
-            }
-        };
-        axios.post('http://localhost:8080/api/rutas', requestData)
+    const editarDistritos = (rol) => {
+        axios.put(`http://localhost:8080/api/roles/${rol.id_rol}`, rol)
             .then(() => {
                 closeModal();
                 ListarDatos();
@@ -37,50 +42,33 @@ export function RutasTabla({ url, il }) {
             })
     };
 
-    const editarBus = (ruta) => {
-        const requestData = {
-            nom_ruta: ruta.nom_ruta,
-            est_ruta: ruta.est_ruta,
-            empresasModel: {
-                id_emp: il
-            }
-        };
 
-        axios.put(`http://localhost:8080/api/rutas/${ruta.id_ruta}`, requestData)
-            .then(() => {
-                closeModal();
-                ListarDatos();
-            })
-            .catch((error) => {
-                console.log(error);
-                console.log(error.response);
-            })
-    };
-
-    const habilitarRuta = (id) => {
-        axios.get(`http://localhost:8080/api/rutas/${id}`)
+    const habilitardistrito = (id) => {
+        axios
+            .get(`http://localhost:8080/api/roles/${id}`)
             .then((response) => {
-                const rutas = response.data;
-                rutas.est_ruta = true;
+                const rol = response.data;
+                rol.est_rol = true;
                 axios
-                    .put(`http://localhost:8080/api/rutas/${id}`, rutas)
+                    .put(`http://localhost:8080/api/roles/${id}`, rol)
                     .then(() => {
                         ListarDatos();
                     });
-            });
+            })
     };
 
-    const deshabilitarRuta = (id) => {
-        axios.get(`http://localhost:8080/api/rutas/${id}`)
+    const deshabilitardistrito = (id) => {
+        axios
+            .get(`http://localhost:8080/api/roles/${id}`)
             .then((response) => {
-                const rutas = response.data;
-                rutas.est_ruta = false;
+                const rol = response.data;
+                rol.est_rol = false;
                 axios
-                    .put(`http://localhost:8080/api/rutas/${id}`, rutas)
+                    .put(`http://localhost:8080/api/roles/${id}`, rol)
                     .then(() => {
                         ListarDatos();
                     });
-            });
+            })
     };
 
     const edit = (bus) => {
@@ -96,53 +84,51 @@ export function RutasTabla({ url, il }) {
         setShowModal(false);
     };
 
+
     return (
-        <>
+        <div className="container-crud">
             <Button variant="success" onClick={openModal}> + </Button>
             <Table striped bordered hover>
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>NOMBRE DE LA RUTA</th>
-                        <th>EMPRESA</th>
+                        <th>NOMBRE DEL ROL</th>
                         <th>ESTADO</th>
                         <th>GESTION</th>
                     </tr>
                 </thead>
                 <tbody>
                     {datos.map((dato) => (
-                        <tr key={dato.id_ruta}>
-                            <td>{dato.id_ruta}</td>
-                            <td>{dato.nom_ruta}</td>
-                            <td>{dato.empresasModel.nom_emp}</td>
-                            <td>{dato.est_ruta ? "Habilitada" : "Deshabilitada"}</td>
+                        <tr key={dato.id_rol}>
+                            <td>{dato.id_rol}</td>
+                            <td>{dato.nom_rol}</td>
+                            <td>{dato.est_rol ? "Habilitada" : "Deshabilitada"}</td>
                             <td>
-                                <Button variant="success" onClick={() => edit(dato)}  >Editar</Button>
+                                <Button variant="success" onClick={() => edit(dato)} >Editar</Button>
                                 <Button
-                                    variant={dato.est_ruta ? "warning" : "primary"}
+                                    variant={dato.est_rol ? "warning" : "primary"}
                                     onClick={() => {
-                                        if (dato.est_ruta) {
-                                            deshabilitarRuta(dato.id_ruta)
+                                        if (dato.est_rol) {
+                                            deshabilitardistrito(dato.id_rol);
                                         } else {
-                                            habilitarRuta(dato.id_ruta)
+                                            habilitardistrito(dato.id_rol);
                                         }
                                     }}
                                 >
-                                    {dato.est_ruta ? "Deshabilitar" : "Habilitar"}
+                                    {dato.est_rol ? "Deshabilitar" : "Habilitar"}
                                 </Button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </Table>
-            <RutasModal
-                emp={il}
+            <RolesModal
                 show={showModal}
                 close={closeModal}
-                agregar={agregarBus}
+                agregar={agregarDistrito}
                 datosaeditar={datosEdit}
-                editar={editarBus}
+                editar={editarDistritos}
             />
-        </>
+        </div>
     );
 }

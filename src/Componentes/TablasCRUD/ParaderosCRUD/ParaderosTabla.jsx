@@ -1,9 +1,9 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
-import { DistritoModal } from "./distritoModal";
+import { DistritoModal, ParaderosModal } from "./paraderosModal";
 
-export function DistritoTabla({ url }) {
+export function ParaderosTabla({ url }) {
 
     const [datos, setDatos] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -18,20 +18,17 @@ export function DistritoTabla({ url }) {
         ListarDatos();
     }, [ListarDatos]);
 
-    const agregarDistrito = (distrito) => {
-        axios.post(url, distrito)
-            .then(() => {
-                closeModal();
-                console.log(distrito);
-                ListarDatos();
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-    };
-
-    const editarDistritos = (distrito) => {
-        axios.put(`http://localhost:8080/api/distritos/${distrito.id_dis}`, distrito)
+    const agregarDistrito = (paradero) => {
+        console.log(paradero);
+        const requestData = {
+            nom_par: paradero.nom_par,
+            est_par: paradero.est_par,
+            distritosModel: {
+              id_dis: paradero.distritosModel
+            },
+          };
+          console.log(requestData);
+          axios.post('http://localhost:8080/api/paraderos', requestData)
             .then(() => {
                 closeModal();
                 ListarDatos();
@@ -41,28 +38,47 @@ export function DistritoTabla({ url }) {
             })
     };
 
-    const habilitardistrito = (id) => {
+    const editarDistritos = (paradero) => {
+        const requestData = {
+            nom_par: paradero.nom_par,
+            est_par: paradero.est_par,
+            distritosModel: {
+              id_dis: paradero.distritosModel
+            },
+          };
+          console.log(requestData);
+          axios.put(`http://localhost:8080/api/paraderos/${paradero.id_par}`, requestData)
+            .then(() => {
+                closeModal();
+                ListarDatos();
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    };
+
+    const habilitarparadero = (id) => {
         axios
-            .get(`http://localhost:8080/api/distritos/${id}`)
+            .get(`http://localhost:8080/api/paraderos/${id}`)
             .then((response) => {
-                const distritos = response.data;
-                distritos.est_dis = true;
+                const paradero = response.data;
+                paradero.est_par = true;
                 axios
-                    .put(`http://localhost:8080/api/distritos/${id}`, distritos)
+                    .put(`http://localhost:8080/api/paraderos/${id}`, paradero)
                     .then(() => {
                         ListarDatos();
                     });
             })
     };
 
-    const deshabilitardistrito = (id) => {
+    const deshabilitarparadero = (id) => {
         axios
-            .get(`http://localhost:8080/api/distritos/${id}`)
+            .get(`http://localhost:8080/api/paraderos/${id}`)
             .then((response) => {
-                const distritos = response.data;
-                distritos.est_dis = false;
+                const paradero = response.data;
+                paradero.est_par = false;
                 axios
-                    .put(`http://localhost:8080/api/distritos/${id}`, distritos)
+                    .put(`http://localhost:8080/api/paraderos/${id}`, paradero)
                     .then(() => {
                         ListarDatos();
                     });
@@ -87,37 +103,41 @@ export function DistritoTabla({ url }) {
             <Button variant="success" onClick={openModal}> + </Button>
             <Table striped bordered hover>
                 <thead>
-                    <th>ID</th>
-                    <th>NOMBRE DEL DISTRITO</th>
-                    <th>ESTADO</th>
-                    <th>GESTION</th>
+                    <tr>
+                        <th>ID</th>
+                        <th>PARADEROS</th>
+                        <th>NOMBRE DEL DISTRITO</th>
+                        <th>ESTADO</th>
+                        <th>GESTION</th>
+                    </tr>
                 </thead>
                 <tbody>
                     {datos.map((dato) => (
-                        <tr key={dato.id_dis}>
-                            <td>{dato.id_dis}</td>
-                            <td>{dato.nom_dis}</td>
-                            <td>{dato.est_dis ? "Habilitado" : "Deshabilitado"}</td>
+                        <tr key={dato.id_par}>
+                            <td>{dato.id_par}</td>
+                            <td>{dato.nom_par}</td>
+                            <td>{dato.distritosModel.nom_dis}</td>
+                            <td>{dato.est_par ? "Habilitado" : "Deshabilitado"}</td>
                             <td>
                                 <Button variant="success" onClick={() => edit(dato)} >Editar</Button>
                                 <Button
-                                    variant={dato.est_dis ? "warning" : "primary"}
+                                    variant={dato.est_par ? "warning" : "primary"}
                                     onClick={() => {
-                                        if (dato.est_dis) {
-                                            deshabilitardistrito(dato.id_dis);
+                                        if (dato.est_par) {
+                                            deshabilitarparadero(dato.id_par);
                                         } else {
-                                            habilitardistrito(dato.id_dis);
+                                            habilitarparadero(dato.id_par);
                                         }
                                     }}
                                 >
-                                    {dato.est_dis ? "Deshabilitar" : "Habilitar"}
+                                    {dato.est_par ? "Deshabilitar" : "Habilitar"}
                                 </Button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </Table>
-            <DistritoModal
+            <ParaderosModal
                 show={showModal}
                 close={closeModal}
                 agregar={agregarDistrito}

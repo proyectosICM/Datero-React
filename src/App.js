@@ -15,6 +15,9 @@ import { TrabajadorC } from './Componentes/TablasCRUD/TrabajadorCRUD/trabajadorC
 import { MenuERutas } from './Componentes/TablasCRUD/RutasCRUD/menuERutas';
 import { RutasC } from './Componentes/TablasCRUD/RutasCRUD/rutasC';
 import { DistritoC } from './Componentes/TablasCRUD/DistritoCRUD/distritoC';
+import { RolesTabla } from './Componentes/TablasCRUD/RolesCRUD/rolesTabla';
+import { RolesC } from './Componentes/TablasCRUD/RolesCRUD/rolesC';
+import { ParaderosC } from './Componentes/TablasCRUD/ParaderosCRUD/ParaderosC';
 
 
 
@@ -36,11 +39,13 @@ function App() {
         <Route exact path='/empresasCRUD' element={<EmpresasC />}/>
         <Route exact path='/trabajadoresCRUD' element={<MenuETrabajadoresE />}/>
         <Route exact path='/distritosCRUD' element={<DistritoC />}/>
+        <Route exact path='/paraderosCRUD' element={<ParaderosC />}/>
         <Route exact path='/rutasCRUD' element={<MenuERutas />}/>
         <Route exact path='/menuBuses' element={<MenuEBuses />}/>
         <Route exact path='/rutasxemp/:id_emp' element={<RutasC />}/>
         <Route exact path='/busesxemp/:id_emp' element={<BusesC />}/>
         <Route exact path='/trabajadoresxemp/:id_emp' element={<TrabajadorC />}/>
+        <Route exact path='/rolesCRUD' element={<RolesC />}/>
       </Routes>
     </Router>
 
