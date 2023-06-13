@@ -17,6 +17,7 @@ export function NavbarP(){
                         </Link>
                     </Navbar.Brand>
                     <Nav className="me-auto barra">
+                        <Link to='/login' className="linkes">INICIO DE SESION</Link>
                         <Link to='/listvehiculos' className="linkes">LISTADO DE VEHICULOS</Link>
                         <Link to='/monitoreo' className="linkes">TABLA DE MONITOREO</Link>
                         <Link to='/prueba2' className="linkes">MAPA DE MONITOREO</Link>

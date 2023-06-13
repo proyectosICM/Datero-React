@@ -15,9 +15,11 @@ import { TrabajadorC } from './Componentes/TablasCRUD/TrabajadorCRUD/trabajadorC
 import { MenuERutas } from './Componentes/TablasCRUD/RutasCRUD/menuERutas';
 import { RutasC } from './Componentes/TablasCRUD/RutasCRUD/rutasC';
 import { DistritoC } from './Componentes/TablasCRUD/DistritoCRUD/distritoC';
-import { RolesTabla } from './Componentes/TablasCRUD/RolesCRUD/rolesTabla';
+//import { RolesTabla } from './Componentes/TablasCRUD/RolesCRUD/rolesTabla';
 import { RolesC } from './Componentes/TablasCRUD/RolesCRUD/rolesC';
 import { ParaderosC } from './Componentes/TablasCRUD/ParaderosCRUD/ParaderosC';
+import { Login } from './Componentes/Login/login';
+import { Ruta1 } from './Componentes/Mapas/ruta1';
 
 
 
@@ -31,9 +33,11 @@ function App() {
       </div>
       <Routes>
         <Route exact path='/' element={<Inicio />} />
+        <Route exact path='/login' element={<Login />} />
         <Route exact path='/listvehiculos' element={<ListadoVehiculos />}/>
         <Route exact path='/monitoreo' element={<Monitoreo />}/>
         <Route exact path='/prueba2' element={<Prueba2 />}/>
+        <Route exact path='/ruta1' element={<Ruta1 />}/>
         <Route exact path='/registros' element={<Registros />}/>
         <Route exact path='/menuCRUD' element={<MenuCRUD />}/>
         <Route exact path='/empresasCRUD' element={<EmpresasC />}/>
