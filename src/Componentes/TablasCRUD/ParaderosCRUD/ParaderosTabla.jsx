@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
-import { DistritoModal, ParaderosModal } from "./paraderosModal";
+import { ParaderosModal } from "./paraderosModal";
 
 export function ParaderosTabla({ url }) {
 

@@ -2,7 +2,6 @@ import React from "react";
 import '../../Estilos/registros.css'
 import { Form } from "react-bootstrap";
 import { RegistrosTabla } from "./registrosTabla";
-import { MapComponent } from "../../mapComponent";
 
 export function Registros(){
     return(

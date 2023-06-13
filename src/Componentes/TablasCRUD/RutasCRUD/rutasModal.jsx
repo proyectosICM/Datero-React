@@ -13,7 +13,7 @@ export function RutasModal({show, close,datosaeditar,editar,agregar,emp}){
         if(datosaeditar){
             setFormData(datosaeditar);
         } else {
-            limpiar();
+
         }
     },[datosaeditar])
 

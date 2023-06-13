@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
-import { DistritoTabla, ParaderosTabla } from "./ParaderosTabla";
+import { ParaderosTabla } from "./ParaderosTabla";
 
 export function ParaderosC(){
 
     const [tablaSeleccionada, setTablaSeleccionada] = useState("Habilitados");
-    const h = 1;
-    const d = 0;
     const urlT = ("http://localhost:8080/api/paraderos");
     const urlH = (`http://localhost:8080/api/paraderos/parH/1`);
     const urlD = (`http://localhost:8080/api/paraderos/parH/0`);

@@ -28,7 +28,7 @@ export function TrabajadorModal({ show, close, datosaeditar, editar, agregar, il
             setFormData({ ...datosaeditar });
             setEditando(true)
         } else {
-            limpiar();
+            
         }
         ListarRoles();
     }, [datosaeditar, ListarRoles])

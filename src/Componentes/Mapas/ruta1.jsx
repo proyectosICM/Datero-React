@@ -23,9 +23,8 @@ const ruta = [
 export function Ruta1() {
   const mapRef = useRef(null);
   const [showMap, setShowMap] = useState(false);
-  const [map, setMap] = useState(null);
 
-  const createMap = useCallback(() => {
+  const createMap = useCallback(async () => {
     const initialMap = new Map({
       target: mapRef.current,
       layers: [
@@ -48,13 +47,12 @@ export function Ruta1() {
     initialMap.addLayer(markerLayer);
 
     const yoStyle = new Style({
-        image: new Icon({
-          src: require('../../Imagenes/localizador.png'),
-          anchor: [0.5, 1],
-          scale: 0.09,
-        }),
-      });
-  
+      image: new Icon({
+        src: require('../../Imagenes/localizador.png'),
+        anchor: [0.5, 1],
+        scale: 0.09,
+      }),
+    });
 
     const markerFeature = new Feature({
       geometry: new Point(fromLonLat(yo)),
@@ -67,8 +65,6 @@ export function Ruta1() {
       geometry: new LineString(ruta.map(coord => fromLonLat(coord))),
     });
     markerLayer.getSource().addFeature(routeFeature);
-
-    setMap(initialMap);
   }, []);
 
   const handleButtonClick = () => {
@@ -78,7 +74,7 @@ export function Ruta1() {
   useEffect(() => {
     if (showMap) {
       createMap();
-      console.log("mapa creado");
+      console.log('mapa creado');
     }
   }, [showMap, createMap]);
 

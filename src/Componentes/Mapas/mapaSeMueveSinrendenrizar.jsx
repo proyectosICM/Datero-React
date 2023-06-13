@@ -8,21 +8,18 @@ import { fromLonLat } from 'ol/proj';
 import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
 import { Feature } from 'ol';
-import { Point, LineString } from 'ol/geom';
+import { Point } from 'ol/geom';
 import Icon from 'ol/style/Icon';
 import Style from 'ol/style/Style';
-import { Stroke } from 'ol/style';
 
 const vec = [-76.9577902, -12.0371043];
 
-export function MapComponent() {
+export function MapaQueSeMueveSinRenderizar() {
   const mapRef = useRef(null);
-  const [showMap, setShowMap] = useState(false); 
+  const [showMap, setShowMap] = useState(false);
   const [map, setMap] = useState(null);
   const [position, setPosition] = useState(vec); // Posición inicial definida con vec
-  const [positionsHistory, setPositionsHistory] = useState([]); // Historial de posiciones
   const markerRef = useRef(null); // Ref para almacenar la referencia al marcador
-  const lineRef = useRef(null); // Ref para almacenar la referencia a la línea
 
   const createMap = useCallback(() => {
     const initialMap = new Map({
@@ -62,25 +59,6 @@ export function MapComponent() {
 
     markerRef.current = vecinoFeature; // Almacena la referencia al marcador
 
-    const lineSource = new VectorSource();
-    const lineLayer = new VectorLayer({
-      source: lineSource,
-    });
-    initialMap.addLayer(lineLayer);
-
-    const lineStyle = new Style({
-      stroke: new Stroke({
-        color: '#FF0000',
-        width: 2,
-      }),
-    });
-
-    const lineFeature = new Feature();
-    lineFeature.setStyle(lineStyle);
-    lineSource.addFeature(lineFeature);
-
-    lineRef.current = lineFeature; // Almacena la referencia a la línea
-
     setMap(initialMap);
   }, [position]);
 
@@ -88,37 +66,26 @@ export function MapComponent() {
     setShowMap(!showMap);
   };
 
-  const handleMover = useCallback(() => {
+  const handleMover = () => {
     const newLon = position[0] + (Math.random() * 0.001 - 0.0005);
     const newLat = position[1] + (Math.random() * 0.001 - 0.0005);
     const newPosition = [newLon, newLat];
-
-    setPositionsHistory(prevHistory => [...prevHistory, newPosition]); // Agrega la nueva posición al historial
     setPosition(newPosition); // Actualiza la posición a la nueva posición
-  }, [position]);
+  };
 
   useEffect(() => {
     if (showMap && map === null) {
       createMap();
-      handleMover();
       console.log('mapa creado');
     }
-  }, [showMap, map, createMap, handleMover]);
+  }, [showMap, map, createMap]);
 
   useEffect(() => {
     if (markerRef.current && map !== null) {
       markerRef.current.getGeometry().setCoordinates(fromLonLat(position));
+      //handleMover(); /* Activar el movimiento continuo */
     }
   }, [position, map]);
-
-  useEffect(() => {
-    if (lineRef.current && map !== null) {
-      const coordinates = positionsHistory.map(pos => fromLonLat(pos));
-      const lineGeometry = new LineString(coordinates);
-      lineRef.current.setGeometry(lineGeometry);
-      //handleMover();
-    }
-  }, [positionsHistory, map]);
 
   return (
     <div className="container-registros">

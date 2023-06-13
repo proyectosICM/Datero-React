@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { RolesModal } from "./rolesModal";
 
 export function RolesTabla({ url }) {
@@ -13,7 +12,7 @@ export function RolesTabla({ url }) {
     const ListarDatos = useCallback(async () => {
         const results = await axios.get(url);
         setDatos(results.data);
-    }, []);
+    }, [url]);
 
     useEffect(() => {
         ListarDatos();
