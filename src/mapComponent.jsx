@@ -12,6 +12,7 @@ import { Point, LineString } from 'ol/geom';
 import Icon from 'ol/style/Icon';
 import Style from 'ol/style/Style';
 import { Stroke } from 'ol/style';
+import { Button } from 'react-bootstrap';
 
 const vec = [-76.9577902, -12.0371043];
 
@@ -123,8 +124,8 @@ export function MapComponent() {
   return (
     <div className="container-registros">
       <h1>Mapa</h1>
-      <button onClick={handleButtonClick}>Mostrar Mapa</button>
-      <button onClick={handleMover}>Mover</button>
+      <Button onClick={handleButtonClick}>{showMap ? "Ocultar" : "Mostrar"}</Button>
+      <Button onClick={handleMover} variant="success" >Mover</Button>
       {showMap && <div ref={mapRef} className="mapa" />}
     </div>
   );

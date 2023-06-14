@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { ParaderosModal } from "./paraderosModal";
+import { SiGooglemaps } from 'react-icons/si';
+import { Link } from "react-router-dom";
 
 export function ParaderosTabla({ url }) {
 
@@ -26,6 +28,8 @@ export function ParaderosTabla({ url }) {
             distritosModel: {
               id_dis: paradero.distritosModel
             },
+            longitud: paradero.longitud,
+            latitud: paradero.latitud
           };
           console.log(requestData);
           axios.post('http://localhost:8080/api/paraderos', requestData)
@@ -45,6 +49,8 @@ export function ParaderosTabla({ url }) {
             distritosModel: {
               id_dis: paradero.distritosModel
             },
+            longitud: paradero.longitud,
+            latitud: paradero.latitud
           };
           console.log(requestData);
           axios.put(`http://localhost:8080/api/paraderos/${paradero.id_par}`, requestData)
@@ -107,6 +113,7 @@ export function ParaderosTabla({ url }) {
                         <th>ID</th>
                         <th>PARADEROS</th>
                         <th>NOMBRE DEL DISTRITO</th>
+                        <th>COORDENADAS</th>
                         <th>ESTADO</th>
                         <th>GESTION</th>
                     </tr>
@@ -117,6 +124,7 @@ export function ParaderosTabla({ url }) {
                             <td>{dato.id_par}</td>
                             <td>{dato.nom_par}</td>
                             <td>{dato.distritosModel.nom_dis}</td>
+                            <td>{dato.latitud} {dato.latitud & dato.longitud ? "," : "No hay coordenadas registradas"} {dato.longitud}  </td>
                             <td>{dato.est_par ? "Habilitado" : "Deshabilitado"}</td>
                             <td>
                                 <Button variant="success" onClick={() => edit(dato)} >Editar</Button>
@@ -131,6 +139,12 @@ export function ParaderosTabla({ url }) {
                                     }}
                                 >
                                     {dato.est_par ? "Deshabilitar" : "Habilitar"}
+                                </Button>
+                                <Button variant="info">
+                                    <Link to={`/paraderoxmap/${dato.nom_par}/${dato.longitud}/${dato.latitud}`}>
+                                        <SiGooglemaps />Ver en el mapa
+                                    </Link>
+ 
                                 </Button>
                             </td>
                         </tr>

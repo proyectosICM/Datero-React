@@ -7,7 +7,10 @@ export function ParaderosModal({ show, close, datosaeditar, editar, agregar, il 
     const [formData, setFormData] = useState({
         nom_par: "",
         est_par: true,
-        distritosModel: null
+        distritosModel: null,
+        latitud: "",
+        longitud: ""
+
     });
     const [distritos, setDistritos] = useState([]);
     const [editando, setEditando] = useState(false);
@@ -35,7 +38,7 @@ export function ParaderosModal({ show, close, datosaeditar, editar, agregar, il 
             if (
                 updatedFormData.distritosModel &&
                 typeof updatedFormData.distritosModel === "object"
-            ){
+            ) {
                 updatedFormData.distritosModel = updatedFormData.distritosModel.id_dis;
             }
             editar(updatedFormData);
@@ -43,13 +46,12 @@ export function ParaderosModal({ show, close, datosaeditar, editar, agregar, il 
         } else {
             agregar(formData);
         }
-        console.log(formData);
         close();
         limpiar();
     }
 
     const limpiar = () => {
-        setFormData({nom_par: "", est_par: true, distritosModel: null});
+        setFormData({ nom_par: "", est_par: true, distritosModel: null, longitud: "", latitud: "" });
         setEditando(false);
     }
 
@@ -69,7 +71,7 @@ export function ParaderosModal({ show, close, datosaeditar, editar, agregar, il 
                             value={formData.nom_par}
                             onChange={(e) => setFormData({ ...formData, nom_par: e.target.value })}
                         />
-             
+
                         <Form.Label>Distritos</Form.Label>
                         <Form.Select
                             name="conductor"
@@ -88,11 +90,30 @@ export function ParaderosModal({ show, close, datosaeditar, editar, agregar, il 
                             </option>
                             {distritos.map((distrito) => (
                                 <option key={distrito.id_dis} value={distrito.id_dis}>
-                                    {distrito.nom_dis} 
+                                    {distrito.nom_dis}
                                 </option>
                             ))}
                         </Form.Select>
 
+
+                        <Form.Label>Latitud:</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="latitud"
+                            placeholder="latitud"
+                            value={formData.latitud}
+                            onChange={(e) => setFormData({ ...formData, latitud: e.target.value })}
+                        />
+
+
+                        <Form.Label>Longitud:</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="longitud"
+                            placeholder="longitud"
+                            value={formData.longitud}
+                            onChange={(e) => setFormData({ ...formData, longitud: e.target.value })}
+                        />
                         <Button type="submit">Crear</Button>
                         <Button onClick={close}>Cerrar</Button>
                     </Form>

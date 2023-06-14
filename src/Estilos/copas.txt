@@ -1,0 +1,110 @@
+chatgpt por favor continua en tu papel de diseñador ux/ui y realiza algo Mas 
+complejo: 
+
+ok como podras observar agrege un icono quiero que este icono este centrado y al igual que los labels
+
+archivo login.jsx:
+
+import React from "react";
+import { Form, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { FaUserCircle } from "react-icons/fa";  
+import "./login.css";
+
+export function Login() {
+  return (
+    <div className="login-container">
+      <div className="login-form">
+        <h1>Iniciar sesión</h1>
+        <h1><FaUserCircle /></h1>
+        <Form>
+          <Form.Group controlId="formBasicEmail">
+            <Form.Label>Usuario</Form.Label>
+            <Form.Control type="email" placeholder="Ingresa tu usuario" />
+          </Form.Group>
+
+          <Form.Group controlId="formBasicPassword">
+            <Form.Label>Contraseña</Form.Label>
+            <Form.Control type="password" placeholder="Ingresa tu contraseña" />
+          </Form.Group>
+
+          <Button variant="primary" type="submit" className="login-button">
+            Iniciar sesión
+          </Button>
+        </Form>
+      </div>
+      <div className="login-info">
+        <h2>Datero: un proyecto de seguimiento GPS para tu empresa</h2>
+        <Link to="/contratar">Contratar</Link>
+      </div>
+    </div>
+  );
+}
+
+archivo login.css:
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5; /* Color de fondo opaco */
+  }
+  
+  .login-form,
+  .login-info {
+    width: 350px;
+    height: 400px;
+    padding: 30px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .login-form {
+    background-color: #f9f9f9; /* Color de fondo del formulario */
+  }
+  
+  .login-info {
+    position: relative;
+    background-color: #d9edf7; /* Color de fondo del panel informativo */
+  }
+  
+  .login-info::before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: #5bc0de; /* Color de la esfera */
+    border-radius: 50%;
+  }
+  
+  .login-button {
+    margin-top: 20px;
+    width: 100%;
+  }
+  
+  h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  
+  a {
+    display: inline-block;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  

@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Table } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import { RutasModal } from "./rutasModal";
+import './styles/rutasTabla.css';
 
 export function RutasTabla({ url, il }) {
-
     const [datos, setDatos] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [datosEdit, setDatosEdit] = useState(null);
@@ -18,23 +18,23 @@ export function RutasTabla({ url, il }) {
         ListarDatos();
     }, [ListarDatos]);
 
-
     const agregarBus = (ruta) => {
         const requestData = {
             nom_ruta: ruta.nom_ruta,
             est_ruta: ruta.est_ruta,
             empresasModel: {
-                id_emp: il
-            }
+                id_emp: il,
+            },
         };
-        axios.post('http://localhost:8080/api/rutas', requestData)
+        axios
+            .post("http://localhost:8080/api/rutas", requestData)
             .then(() => {
                 closeModal();
                 ListarDatos();
             })
             .catch((error) => {
                 console.log(error);
-            })
+            });
     };
 
     const editarBus = (ruta) => {
@@ -42,11 +42,12 @@ export function RutasTabla({ url, il }) {
             nom_ruta: ruta.nom_ruta,
             est_ruta: ruta.est_ruta,
             empresasModel: {
-                id_emp: il
-            }
+                id_emp: il,
+            },
         };
 
-        axios.put(`http://localhost:8080/api/rutas/${ruta.id_ruta}`, requestData)
+        axios
+            .put(`http://localhost:8080/api/rutas/${ruta.id_ruta}`, requestData)
             .then(() => {
                 closeModal();
                 ListarDatos();
@@ -54,39 +55,33 @@ export function RutasTabla({ url, il }) {
             .catch((error) => {
                 console.log(error);
                 console.log(error.response);
-            })
+            });
     };
 
     const habilitarRuta = (id) => {
-        axios.get(`http://localhost:8080/api/rutas/${id}`)
-            .then((response) => {
-                const rutas = response.data;
-                rutas.est_ruta = true;
-                axios
-                    .put(`http://localhost:8080/api/rutas/${id}`, rutas)
-                    .then(() => {
-                        ListarDatos();
-                    });
+        axios.get(`http://localhost:8080/api/rutas/${id}`).then((response) => {
+            const rutas = response.data;
+            rutas.est_ruta = true;
+            axios.put(`http://localhost:8080/api/rutas/${id}`, rutas).then(() => {
+                ListarDatos();
             });
+        });
     };
 
     const deshabilitarRuta = (id) => {
-        axios.get(`http://localhost:8080/api/rutas/${id}`)
-            .then((response) => {
-                const rutas = response.data;
-                rutas.est_ruta = false;
-                axios
-                    .put(`http://localhost:8080/api/rutas/${id}`, rutas)
-                    .then(() => {
-                        ListarDatos();
-                    });
+        axios.get(`http://localhost:8080/api/rutas/${id}`).then((response) => {
+            const rutas = response.data;
+            rutas.est_ruta = false;
+            axios.put(`http://localhost:8080/api/rutas/${id}`, rutas).then(() => {
+                ListarDatos();
             });
+        });
     };
 
     const edit = (bus) => {
         setDatosEdit(bus);
         setShowModal(true);
-    }
+    };
 
     const openModal = () => {
         setShowModal(true);
@@ -98,43 +93,55 @@ export function RutasTabla({ url, il }) {
 
     return (
         <>
-            <Button variant="success" onClick={openModal}> + </Button>
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>NOMBRE DE LA RUTA</th>
-                        <th>EMPRESA</th>
-                        <th>ESTADO</th>
-                        <th>GESTION</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {datos.map((dato) => (
-                        <tr key={dato.id_ruta}>
-                            <td>{dato.id_ruta}</td>
-                            <td>{dato.nom_ruta}</td>
-                            <td>{dato.empresasModel.nom_emp}</td>
-                            <td>{dato.est_ruta ? "Habilitada" : "Deshabilitada"}</td>
-                            <td>
-                                <Button variant="success" onClick={() => edit(dato)}  >Editar</Button>
+
+            <div className="set-botones">
+                <Button variant="success" onClick={openModal}>
+                    +
+                </Button>
+            </div>
+
+            <div className="card-container">
+                {datos.map((dato) => (
+                    <Card key={dato.id_ruta} className="custom-card">
+                        <Card.Body>
+                            <Card.Title>{dato.nom_ruta}</Card.Title>
+                            <Card.Text>
+                                <strong>Empresa:</strong> {dato.empresasModel.nom_emp}
+                            </Card.Text>
+                            <Card.Text>
+                                <strong>Estado:</strong>{" "}
+                                {dato.est_ruta ? "Habilitada" : "Deshabilitada"}
+                            </Card.Text>
+
+                            <div className="button-container">
+                                <Button className="button" variant="success" onClick={() => edit(dato)}>
+                                    Editar Nombre de Ruta
+                                </Button>
+                                <Button className="button" variant="success" onClick={() => edit(dato)}>
+                                    Editar Paraderos
+                                </Button>
+                                <Button className="button" variant="success" onClick={() => edit(dato)}>
+                                    Ver ruta en el mapa
+                                </Button>
                                 <Button
+                                    className="button"
                                     variant={dato.est_ruta ? "warning" : "primary"}
                                     onClick={() => {
                                         if (dato.est_ruta) {
-                                            deshabilitarRuta(dato.id_ruta)
+                                            deshabilitarRuta(dato.id_ruta);
                                         } else {
-                                            habilitarRuta(dato.id_ruta)
+                                            habilitarRuta(dato.id_ruta);
                                         }
                                     }}
                                 >
                                     {dato.est_ruta ? "Deshabilitar" : "Habilitar"}
                                 </Button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
+                            </div>
+
+                        </Card.Body>
+                    </Card>
+                ))}
+            </div>
             <RutasModal
                 emp={il}
                 show={showModal}

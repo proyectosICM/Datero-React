@@ -2,9 +2,9 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import './menuEParaderos.css';
+import './menuEmpresas.css';
 
-export function MenuEParaderos() {
+export function MenuEmpresas({ ruta }) {
     const [datos, setDatos] = useState([]);
 
     const ListarDatos = useCallback(async () => {
@@ -26,8 +26,8 @@ export function MenuEParaderos() {
                 <Card className="crud-card" key={index}>
                     <Card.Body>
                         <Card.Title>{dato.nom_emp}</Card.Title>
-                        <Card.Text>Ver las unidades</Card.Text>
-                        <Link to={`/busesxemp/${dato.id_emp}`}>
+                        <Card.Text>Ver todos los trabajadores</Card.Text>
+                        <Link to={`${ruta}/${dato.id_emp}`}>
                             <Button variant="primary" className="btn-l">IR</Button>
                         </Link>
                     </Card.Body>
