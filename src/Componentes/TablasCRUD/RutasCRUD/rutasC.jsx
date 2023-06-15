@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { Button } from "react-bootstrap";
 import { RutasTabla } from "./rutasTabla";
 import { useParams } from "react-router-dom";
 import './styles/rutasC.css';
+import { BotonesCRUD } from "../../Common/botonesCRUD";
 
 export function RutasC() {
 
     const { id_emp } = useParams();
-    const [tablaSeleccionada, setTablaSeleccionada] = useState("Habilitadas");
+    const [tablaSeleccionada, setTablaSeleccionada] = useState("Habilitados");
 
     const urlT = `http://localhost:8080/api/rutas/rutasXEmpT/${id_emp}`
     const urlH = `http://localhost:8080/api/rutas/rutasXEmpH/${id_emp}`
@@ -17,23 +17,37 @@ export function RutasC() {
         setTablaSeleccionada(tabla);
     }
 
+    const [abrir, setAbrir] = useState(false);
+
+    const handleAbrirModal = () => {
+        if(!abrir){
+            setAbrir(true);
+        } else {
+            setAbrir(false);
+        }
+    }
+
+    const handleCerrarModal = () => {
+        if(abrir){
+            setAbrir(false);
+        }
+    }
+
     return (
         <div className="container-crud">
             <div className="set-botones">
-            <Button variant="primary" onClick={() => handleMostrarTabla("Habilitadas")}>Mostrar Rutas Habilitadas</Button>
-            <Button variant="primary" onClick={() => handleMostrarTabla("Deshabilitadas")}>Mostrar Rutas Deshabilitadas</Button>
-            <Button variant="primary" onClick={() => handleMostrarTabla("Todas")}>Mostrar Todas Las Rutas</Button>
+                <BotonesCRUD activador={handleMostrarTabla} btnTabla={tablaSeleccionada} abrir={handleAbrirModal} />
             </div>
 
 
-                {tablaSeleccionada === "Habilitadas" && (
-                    <RutasTabla il={id_emp} url={urlH} />
+                {tablaSeleccionada === "Habilitados" && (
+                    <RutasTabla il={id_emp} url={urlH} abrir={abrir} cerrar={handleCerrarModal} />
                 )}
-                {tablaSeleccionada === "Deshabilitadas" && (
-                    <RutasTabla il={id_emp} url={urlD} />
+                {tablaSeleccionada === "Deshabilitados" && (
+                    <RutasTabla il={id_emp} url={urlD} abrir={abrir} cerrar={handleCerrarModal}/>
                 )}
-                {tablaSeleccionada === "Todas" && (
-                    <RutasTabla il={id_emp} url={urlT} />
+                {tablaSeleccionada === "Todos" && (
+                    <RutasTabla il={id_emp} url={urlT} abrir={abrir} cerrar={handleCerrarModal}/>
                 )}
 
 

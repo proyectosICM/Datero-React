@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { DistritoModal } from "./distritoModal";
 
-export function DistritoTabla({ url }) {
+export function DistritoTabla({ url, abrir, cerrar }) {
 
     const [datos, setDatos] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -74,17 +74,14 @@ export function DistritoTabla({ url }) {
         setShowModal(true);
     }
 
-    const openModal = () => {
-        setShowModal(true);
-    };
 
     const closeModal = () => {
+        cerrar();
         setShowModal(false);
     };
 
     return (
         <>
-            <Button variant="success" onClick={openModal}> + </Button>
             <Table striped bordered hover>
                 <thead>
                     <th>ID</th>
@@ -118,7 +115,7 @@ export function DistritoTabla({ url }) {
                 </tbody>
             </Table>
             <DistritoModal
-                show={showModal}
+                show={showModal || abrir}
                 close={closeModal}
                 agregar={agregarDistrito}
                 datosaeditar={datosEdit}

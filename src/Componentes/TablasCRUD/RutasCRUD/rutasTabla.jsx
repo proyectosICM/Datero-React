@@ -3,8 +3,9 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Button, Card } from "react-bootstrap";
 import { RutasModal } from "./rutasModal";
 import './styles/rutasTabla.css';
+import { Link } from "react-router-dom";
 
-export function RutasTabla({ url, il }) {
+export function RutasTabla({ url, il, abrir, cerrar }) {
     const [datos, setDatos] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [datosEdit, setDatosEdit] = useState(null);
@@ -17,6 +18,8 @@ export function RutasTabla({ url, il }) {
     useEffect(() => {
         ListarDatos();
     }, [ListarDatos]);
+
+
 
     const agregarBus = (ruta) => {
         const requestData = {
@@ -83,22 +86,16 @@ export function RutasTabla({ url, il }) {
         setShowModal(true);
     };
 
-    const openModal = () => {
-        setShowModal(true);
-    };
-
     const closeModal = () => {
+        cerrar();
         setShowModal(false);
     };
+
+
 
     return (
         <>
 
-            <div className="set-botones">
-                <Button variant="success" onClick={openModal}>
-                    +
-                </Button>
-            </div>
 
             <div className="card-container">
                 {datos.map((dato) => (
@@ -117,8 +114,8 @@ export function RutasTabla({ url, il }) {
                                 <Button className="button" variant="success" onClick={() => edit(dato)}>
                                     Editar Nombre de Ruta
                                 </Button>
-                                <Button className="button" variant="success" onClick={() => edit(dato)}>
-                                    Editar Paraderos
+                                <Button className="button" variant="success">
+                                    <Link to={`/paraderoxruta/${dato.id_ruta}`}>Administrar Paraderos</Link>
                                 </Button>
                                 <Button className="button" variant="success" onClick={() => edit(dato)}>
                                     Ver ruta en el mapa
@@ -144,7 +141,7 @@ export function RutasTabla({ url, il }) {
             </div>
             <RutasModal
                 emp={il}
-                show={showModal}
+                show={showModal || abrir}
                 close={closeModal}
                 agregar={agregarBus}
                 datosaeditar={datosEdit}
