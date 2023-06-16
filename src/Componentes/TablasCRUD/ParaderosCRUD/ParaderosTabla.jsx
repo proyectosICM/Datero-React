@@ -5,7 +5,7 @@ import { ParaderosModal } from "./paraderosModal";
 import { SiGooglemaps } from 'react-icons/si';
 import { Link } from "react-router-dom";
 
-export function ParaderosTabla({ url }) {
+export function ParaderosTabla({ url, abrir, cerrar  }) {
 
     const [datos, setDatos] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -96,17 +96,14 @@ export function ParaderosTabla({ url }) {
         setShowModal(true);
     }
 
-    const openModal = () => {
-        setShowModal(true);
-    };
 
     const closeModal = () => {
         setShowModal(false);
+        cerrar();
     };
 
     return (
         <>
-            <Button variant="success" onClick={openModal}> + </Button>
             <Table striped bordered hover>
                 <thead>
                     <tr>
@@ -152,7 +149,7 @@ export function ParaderosTabla({ url }) {
                 </tbody>
             </Table>
             <ParaderosModal
-                show={showModal}
+                show={showModal || abrir}
                 close={closeModal}
                 agregar={agregarDistrito}
                 datosaeditar={datosEdit}

@@ -3,22 +3,34 @@ import { Button} from "react-bootstrap";
 import { EmpresasT } from "./empresasT";
 import { EmpresasH } from "./empresasH";
 import { EmpresasD } from "./empresasD";
+import { BotonesCRUD } from "../../Common/botonesCRUD";
+
 export function EmpresasC(){
 
     const [mostrartabla, setMostrarTabla] = useState(true)
     const [tablaSeleccionada, setTablaSeleccionada] = useState("Habilitadas");
+    const [abrir, setAbrir] = useState(false);
 
     const handleMostrarTabla = (tabla) => {
         setTablaSeleccionada(tabla);
         setMostrarTabla(true);
     }
+
+    const handleAbrirModal = () => {
+        if(!abrir){
+            setAbrir(true);
+        } else {
+            setAbrir(false);
+        }
+    }
+
+
     return (
-        <div>
 
             <div className="container-crud" >
-            <Button onClick={() => handleMostrarTabla("Habilitadas")}>Empresas Habilitadas</Button>
-            <Button onClick={() => handleMostrarTabla("Deshabilitadas")}>Empresas Deshabilitadas</Button>
-            <Button onClick={() => handleMostrarTabla("Todas")}>Ver todas las Empresas</Button>
+            <div className="set-botones">
+                <BotonesCRUD activador={handleMostrarTabla} btnTabla={tablaSeleccionada} abrir={handleAbrirModal} />
+            </div>
 
                 {mostrartabla && (
                     <>
@@ -34,7 +46,6 @@ export function EmpresasC(){
                     </>
 
                 )}
-            </div>
         </div>
     );
 }
