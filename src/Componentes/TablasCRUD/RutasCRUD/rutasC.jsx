@@ -15,7 +15,7 @@ export function RutasC() {
 
     const handleMostrarTabla = (tabla) => {
         setTablaSeleccionada(tabla);
-    }
+    };
 
     const [abrir, setAbrir] = useState(false);
 
@@ -25,13 +25,13 @@ export function RutasC() {
         } else {
             setAbrir(false);
         }
-    }
+    };
 
     const handleCerrarModal = () => {
         if(abrir){
             setAbrir(false);
         }
-    }
+    };
 
     return (
         <div className="container-crud">
@@ -49,8 +49,6 @@ export function RutasC() {
                 {tablaSeleccionada === "Todos" && (
                     <RutasTabla il={id_emp} url={urlT} abrir={abrir} cerrar={handleCerrarModal}/>
                 )}
-
-
         </div>
     );
 }

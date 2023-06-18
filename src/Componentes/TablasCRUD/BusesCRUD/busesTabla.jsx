@@ -3,6 +3,8 @@ import React, { useCallback, useState } from "react";
 import { useEffect } from "react";
 import { Button, Table } from "react-bootstrap";
 import { BusesModal } from "./busesModal";
+import { busesURL } from "../../API/apiurls";
+import { agregarElemento, deshabilitarElemento, editarElemento, habilitarElemento } from "../../API/apiCRUD";
 
 
 export function BusesTabla({il, url}) {
@@ -37,15 +39,7 @@ export function BusesTabla({il, url}) {
             }
           };
 
-          console.log(requestData);
-        axios.post('http://localhost:8080/api/buses', requestData)
-        .then(()=>{
-            closeModal();
-            ListarDatos();
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+        agregarElemento(busesURL, requestData, closeModal, ListarDatos);
     };
 
     const editarBus = (bus) => {
@@ -63,45 +57,16 @@ export function BusesTabla({il, url}) {
               id_ruta: bus.rutasModel
             }
           };
-        console.log(bus);
-        console.log(requestData);
-        axios.put(`http://localhost:8080/api/buses/${bus.id_bus}`, requestData)
-        .then(()=>{
-            closeModal();
-            ListarDatos();
-        })
-        .catch((error) => {
-            console.log(error);
-            console.log(error.response);
-        })
+        const apiurledit = `${busesURL}/${bus.id_bus}`;
+        editarElemento(apiurledit, requestData, closeModal, ListarDatos);
     };
 
     const habilitarBus = (id) => {
-        axios
-            .get(`http://localhost:8080/api/buses/${id}`)
-            .then((response) => {
-                const buses = response.data;
-                buses.est_bus = true;
-                axios
-                    .put(`http://localhost:8080/api/buses/${id}`, buses)
-                    .then(() => {
-                        ListarDatos();
-                    });
-            })
+        habilitarElemento(busesURL, id, `est_bus`, ListarDatos);
     };
 
     const deshabilitarBus = (id) => {
-        axios
-            .get(`http://localhost:8080/api/buses/${id}`)
-            .then((response) => {
-                const buses = response.data;
-                buses.est_bus = false;
-                axios
-                    .put(`http://localhost:8080/api/buses/${id}`, buses)
-                    .then(() => {
-                        ListarDatos();
-                    });
-            })
+        deshabilitarElemento(busesURL, id, `est_bus`, ListarDatos);
     };
 
     const edit = (bus) => {

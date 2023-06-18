@@ -5,6 +5,7 @@ import { Table } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { ParaderoXRutaModal } from "./paraderoXRutaModal";
 import { BsArrowUpCircleFill, BsFillArrowDownCircleFill } from "react-icons/bs";
+import { RutasMapa } from "../RutasCRUD/rutasMapa";
 
 export function ParaderoXRutaTabla() {
     const [datos, setDatos] = useState([]);
@@ -112,6 +113,7 @@ export function ParaderoXRutaTabla() {
         setShowModal(false);
     };
 
+
     return (
         <div className="container-crud">
             <div>
@@ -121,6 +123,7 @@ export function ParaderoXRutaTabla() {
                         : "Cargando Datos"}
                 </h2>
                 <Button variant="success" onClick={openModal}>Crear</Button>
+                <Button variant="success">Ver el mapa</Button>
             </div>
 
             <Table striped bordered hover>
@@ -172,6 +175,7 @@ export function ParaderoXRutaTabla() {
                 datosaeditar={datosEdit}
                 editar={editarParaderoXRuta}
             />
+            <RutasMapa dat = {datos} />
         </div>
     );
 }

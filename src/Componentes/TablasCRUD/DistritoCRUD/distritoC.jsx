@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { DistritoTabla } from "./distritoTabla";
 import { BotonesCRUD } from "../../Common/botonesCRUD";
 
+import {distritosURL, distritosHURL, distritosDURL} from '../../API/apiurls';
+
 export function DistritoC(){
 
     const [tablaSeleccionada, setTablaSeleccionada] = useState("Habilitados");
-    const h = 1;
-    const d = 0;
-    const urlT = ("http://localhost:8080/api/distritos");
-    const urlH = (`http://localhost:8080/api/distritos/disH/${h}`);
-    const urlD = (`http://localhost:8080/api/distritos/disH/${d}`);
+    const urlT = distritosURL;
+    const urlH = distritosHURL;
+    const urlD = distritosDURL;
 
     const handleMostrarTabla = (tabla) => {
         setTablaSeleccionada(tabla);

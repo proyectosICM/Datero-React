@@ -2,6 +2,14 @@ import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { DistritoModal } from "./distritoModal";
+import {
+    agregarElemento,
+    editarElemento,
+    habilitarElemento,
+    deshabilitarElemento,
+} from '../../API/apiCRUD';
+
+import {distritosURL} from '../../API/apiurls';
 
 export function DistritoTabla({ url, abrir, cerrar }) {
 
@@ -18,55 +26,23 @@ export function DistritoTabla({ url, abrir, cerrar }) {
         ListarDatos();
     }, [ListarDatos]);
 
+
+
     const agregarDistrito = (distrito) => {
-        axios.post(url, distrito)
-            .then(() => {
-                closeModal();
-                console.log(distrito);
-                ListarDatos();
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+        agregarElemento(distritosURL, distrito, closeModal, ListarDatos);
     };
 
     const editarDistritos = (distrito) => {
-        axios.put(`http://localhost:8080/api/distritos/${distrito.id_dis}`, distrito)
-            .then(() => {
-                closeModal();
-                ListarDatos();
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+        const apiurledit = `${distritosURL}/${distrito.id_dis}`;
+        editarElemento(apiurledit, distrito, closeModal, ListarDatos);
     };
 
     const habilitardistrito = (id) => {
-        axios
-            .get(`http://localhost:8080/api/distritos/${id}`)
-            .then((response) => {
-                const distritos = response.data;
-                distritos.est_dis = true;
-                axios
-                    .put(`http://localhost:8080/api/distritos/${id}`, distritos)
-                    .then(() => {
-                        ListarDatos();
-                    });
-            })
+        habilitarElemento(distritosURL, id, `est_dis`, ListarDatos);
     };
 
     const deshabilitardistrito = (id) => {
-        axios
-            .get(`http://localhost:8080/api/distritos/${id}`)
-            .then((response) => {
-                const distritos = response.data;
-                distritos.est_dis = false;
-                axios
-                    .put(`http://localhost:8080/api/distritos/${id}`, distritos)
-                    .then(() => {
-                        ListarDatos();
-                    });
-            })
+        deshabilitarElemento(distritosURL, id, `est_dis`, ListarDatos);
     };
 
     const edit = (bus) => {
@@ -84,10 +60,12 @@ export function DistritoTabla({ url, abrir, cerrar }) {
         <>
             <Table striped bordered hover>
                 <thead>
-                    <th>ID</th>
-                    <th>NOMBRE DEL DISTRITO</th>
-                    <th>ESTADO</th>
-                    <th>GESTION</th>
+                    <tr>
+                        <th>ID</th>
+                        <th>NOMBRE DEL DISTRITO</th>
+                        <th>ESTADO</th>
+                        <th>GESTION</th>
+                    </tr>
                 </thead>
                 <tbody>
                     {datos.map((dato) => (

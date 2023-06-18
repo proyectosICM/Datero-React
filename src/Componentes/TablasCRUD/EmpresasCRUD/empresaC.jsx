@@ -8,7 +8,7 @@ import { BotonesCRUD } from "../../Common/botonesCRUD";
 export function EmpresasC(){
 
     const [mostrartabla, setMostrarTabla] = useState(true)
-    const [tablaSeleccionada, setTablaSeleccionada] = useState("Habilitadas");
+    const [tablaSeleccionada, setTablaSeleccionada] = useState("Habilitados");
     const [abrir, setAbrir] = useState(false);
 
     const handleMostrarTabla = (tabla) => {
@@ -34,13 +34,13 @@ export function EmpresasC(){
 
                 {mostrartabla && (
                     <>
-                        {tablaSeleccionada === "Habilitadas" && (
+                        {tablaSeleccionada === "Habilitados" && (
                             <EmpresasH />
                         )}
-                        {tablaSeleccionada === "Deshabilitadas" && (
+                        {tablaSeleccionada === "Deshabilitados" && (
                             <EmpresasD />
                         )}
-                        {tablaSeleccionada === "Todas" && (
+                        {tablaSeleccionada === "Todos" && (
                             <EmpresasT />
                         )}
                     </>

@@ -11,19 +11,20 @@ import { Feature } from 'ol';
 import { Point, LineString } from 'ol/geom';
 import Icon from 'ol/style/Icon';
 import Style from 'ol/style/Style';
-import { Stroke } from 'ol/style';
+import Fill from 'ol/style/Fill';
+import { Stroke, Text } from 'ol/style';
 import { Button } from 'react-bootstrap';
 
 const vec = [-76.9577902, -12.0371043];
 
 export function MapComponent() {
   const mapRef = useRef(null);
-  const [showMap, setShowMap] = useState(false); 
+  const [showMap, setShowMap] = useState(false);
   const [map, setMap] = useState(null);
-  const [position, setPosition] = useState(vec); // Posición inicial definida con vec
-  const [positionsHistory, setPositionsHistory] = useState([]); // Historial de posiciones
-  const markerRef = useRef(null); // Ref para almacenar la referencia al marcador
-  const lineRef = useRef(null); // Ref para almacenar la referencia a la línea
+  const [position, setPosition] = useState(vec);
+  const [positionsHistory, setPositionsHistory] = useState([]);
+  const markerRef = useRef(null);
+  const lineRef = useRef(null);
 
   const createMap = useCallback(() => {
     const initialMap = new Map({
@@ -37,7 +38,7 @@ export function MapComponent() {
         }),
       ],
       view: new View({
-        center: fromLonLat(position), // Utiliza la posición actual
+        center: fromLonLat(position),
         zoom: 18,
       }),
     });
@@ -46,6 +47,16 @@ export function MapComponent() {
       source: new VectorSource(),
     });
     initialMap.addLayer(markerLayer);
+    /*
+        const textStyle = new Style({
+          text: new Text({
+            text: 'Título del marcador',
+            offsetY: -15,
+            textAlign: 'center',
+            fill: new Fill({ color: '#000000' }),
+            font: '12px sans-serif', // Establecer la propiedad font directamente
+          }),
+        });*/
 
     const vecinoStyle = new Style({
       image: new Icon({
@@ -53,15 +64,16 @@ export function MapComponent() {
         anchor: [0.5, 1],
         scale: 0.09,
       }),
+      //text: textStyle,
     });
 
     const vecinoFeature = new Feature({
-      geometry: new Point(fromLonLat(position)), // Utiliza la posición actual
+      geometry: new Point(fromLonLat(position)),
     });
     vecinoFeature.setStyle(vecinoStyle);
     markerLayer.getSource().addFeature(vecinoFeature);
 
-    markerRef.current = vecinoFeature; // Almacena la referencia al marcador
+    markerRef.current = vecinoFeature;
 
     const lineSource = new VectorSource();
     const lineLayer = new VectorLayer({
@@ -80,7 +92,7 @@ export function MapComponent() {
     lineFeature.setStyle(lineStyle);
     lineSource.addFeature(lineFeature);
 
-    lineRef.current = lineFeature; // Almacena la referencia a la línea
+    lineRef.current = lineFeature;
 
     setMap(initialMap);
   }, [position]);
@@ -94,8 +106,8 @@ export function MapComponent() {
     const newLat = position[1] + (Math.random() * 0.001 - 0.0005);
     const newPosition = [newLon, newLat];
 
-    setPositionsHistory(prevHistory => [...prevHistory, newPosition]); // Agrega la nueva posición al historial
-    setPosition(newPosition); // Actualiza la posición a la nueva posición
+    setPositionsHistory(prevHistory => [...prevHistory, newPosition]);
+    setPosition(newPosition);
   }, [position]);
 
   useEffect(() => {
@@ -117,15 +129,14 @@ export function MapComponent() {
       const coordinates = positionsHistory.map(pos => fromLonLat(pos));
       const lineGeometry = new LineString(coordinates);
       lineRef.current.setGeometry(lineGeometry);
-      //handleMover();
     }
   }, [positionsHistory, map]);
 
   return (
     <div className="container-registros">
-      <h1>Mapa</h1>
+      <h1>Mapa DE PRUEBAS</h1>
       <Button onClick={handleButtonClick}>{showMap ? "Ocultar" : "Mostrar"}</Button>
-      <Button onClick={handleMover} variant="success" >Mover</Button>
+      <Button onClick={handleMover} variant="success">Mover</Button>
       {showMap && <div ref={mapRef} className="mapa" />}
     </div>
   );
