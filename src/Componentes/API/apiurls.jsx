@@ -1,5 +1,3 @@
-
-
 // URL base común
 const baseURL = "http://localhost:8080/api";
 
@@ -36,3 +34,4 @@ export const rutasURL = `${baseURL}/rutas`;
 export const rutasTURL = `${baseURL}/rutas/rutasXEmpT`;
 export const rutasHURL = `${baseURL}/rutas/rutasXEmpH`;
 export const rutasDURL = `${baseURL}/rutas/rutasXEmpD`;
+ 

@@ -31,7 +31,7 @@ export function DistritoModal({show, close,datosaeditar,editar,agregar}){
         setFormData({ nom_dis: "", est_dis: true });
     }
 
-
+ 
     return(
         <div>
             <Modal show={show} onHide={close}>

@@ -19,7 +19,7 @@ import { Login } from './Componentes/Login/login';
 import { Ruta1 } from './Componentes/Mapas/ruta1';
 import { ParaderosMapa } from './Componentes/TablasCRUD/ParaderosCRUD/paraderosMapa';
 import { ParaderoXRutaTabla } from './Componentes/TablasCRUD/ParaderosXRuta/paraderoXRutaTabla';
-import { BusesMapa } from './Componentes/TablasCRUD/BusesCRUD/busesMapa';
+import { BusesMapa } from './Componentes/TablasCRUD/BusesCRUD/BusesMapa/busesMapa';
 
 export const routes = [
   { path: '/', component: <Inicio /> },
@@ -42,5 +42,6 @@ export const routes = [
   { path: '/rolesCRUD', component: <RolesC /> },
   { path: '/paraderoxmap/:nombre/:longitud/:latitud', component: <ParaderosMapa /> },
   { path: '/paraderoxruta/:ruta', component: <ParaderoXRutaTabla /> },
+
   { path: '/listadoBuses/:dts/:rt', component: <BusesMapa /> },
 ];

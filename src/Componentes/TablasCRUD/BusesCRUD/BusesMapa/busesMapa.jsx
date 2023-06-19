@@ -15,19 +15,24 @@ import { Link, useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { Stroke, Text } from 'ol/style';
 import axios from "axios";
-import { busesURL } from '../../API/apiurls';
-
+import { busesURL, distritosURL } from '../../../API/apiurls';
+import BusInfo from './busInfo';
+import { BusMarcador, ParaderoMarcador, RastroMarcadores } from './Marcadores';
+import { MoverBus } from '../../../API/apiCRUD';
 
 export function BusesMapa({ dat }) {
   const { dts, rt } = useParams();
   const vec = [-76.973094400000000, -12.062200700000000];
-  
+
   const [bus, setBus] = useState(null);
   const [datos, setDatos] = useState([]);
+
   const [position, setPosition] = useState(vec);
   const [positionsHistory, setPositionsHistory] = useState([]);
   const markerRef = useRef(null);
   const lineRef = useRef(null);
+  const busRef = useRef(null);
+  const markerLayerRef = useRef(null); // Nueva referencia para el markerLayer
 
   const ListarBuses = useCallback(async () => {
     const response = await axios.get(`${busesURL}/${dts}`);
@@ -39,10 +44,7 @@ export function BusesMapa({ dat }) {
     setDatos(results.data);
   }, [rt]);
 
-
-
   const mapRef = useRef(null);
-  const mapCreatedRef = useRef(false);
   const [showMap, setShowMap] = useState(false);
   const [map, setMap] = useState(null);
 
@@ -56,7 +58,7 @@ export function BusesMapa({ dat }) {
   }, [bus]);
 
   const createMap = useCallback(() => {
-    const position2 = [bus.longitud, bus.latitud];
+    const busPosition = [bus.longitud, bus.latitud];
 
     const initialMap = new Map({
       target: mapRef.current,
@@ -64,12 +66,12 @@ export function BusesMapa({ dat }) {
         new TileLayer({
           source: new XYZ({
             url: 'https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
-            attributions: '© Google Maps',
+            attributions: '© Datero APP',
           }),
         }),
       ],
       view: new View({
-        center: fromLonLat(position),
+        center: fromLonLat(busPosition),
         zoom: 15,
       }),
     });
@@ -79,87 +81,39 @@ export function BusesMapa({ dat }) {
     });
 
     initialMap.addLayer(markerLayer);
+    markerLayerRef.current = markerLayer; // Asignar markerLayer a la referencia
 
+    //Inicio de Rutas
     datos.forEach((dato) => {
       const { longitud, latitud } = dato.paraderosModel;
-      const punteroStyle = new Style({
-        image: new CircleStyle({
-          radius: 5,
-          fill: null,
-        }),
-      });
 
-      const bus2Style = new Style({
-        image: new Icon({
-          src: require('../../../Imagenes/localizador.png'),
-          anchor: [0.5, 1],
-          scale: 0.09,
-        }),
-      });
-
-      const bus2 = new Feature({
-        geometry: new Point(fromLonLat(position2)),
-      });
-
-      bus2.setStyle(bus2Style);
-      markerLayer.getSource().addFeature(bus2);
-
-      const paraderosStyle = new Style({
-        image: new Icon({
-          src: require('../../../Imagenes/paradero.png'),
-          anchor: [0.5, 1],
-          scale: 0.09,
-        }),
-      });
-
-      const feature = new Feature({
-        geometry: new Point(fromLonLat([longitud, latitud])),
-      });
-
-      feature.setStyle(paraderosStyle);
-      markerLayer.getSource().addFeature(feature);
+      const paraderoMarcador = ParaderoMarcador({ pos: [longitud, latitud] });
+      markerLayer.getSource().addFeature(paraderoMarcador);
     });
+    //Fin de Rutas
 
+    //Inicio Buses Marcadores
+    const busMarcador = BusMarcador({ pos: position });
+    markerLayer.getSource().addFeature(busMarcador);
 
-    const busStyle = new Style({
-      image: new Icon({
-        src: require('../../../Imagenes/localizador.png'),
-        anchor: [0.5, 1],
-        scale: 0.09,
-      }),
-    });
+    const busActual = BusMarcador({ pos: busPosition });
+    markerLayer.getSource().addFeature(busActual);
 
-    const busP = new Feature({
-      geometry: new Point(fromLonLat(position)),
-    });
+    markerRef.current = busMarcador;
+    busRef.current = busActual;
+    //Fin Buses Marcadores
 
-    busP.setStyle(busStyle);
-
-    markerLayer.getSource().addFeature(busP);
-
-    markerRef.current = busP;
-    
+    //Rastro de Marcadores
     const lineSource = new VectorSource();
     const lineLayer = new VectorLayer({
       source: lineSource,
     });
     initialMap.addLayer(lineLayer);
 
-    const lineStyle = new Style({
-      stroke: new Stroke({
-        color: '#FF0000',
-        width: 2,
-      }),
-    });
-
-    const lineFeature = new Feature();
-    lineFeature.setStyle(lineStyle);
-    lineSource.addFeature(lineFeature);
-
-    lineRef.current = lineFeature;
-
-
-
+    const rastrobusprueba = RastroMarcadores();
+    lineSource.addFeature(rastrobusprueba);
+    lineRef.current = rastrobusprueba;
+    //Fin de Rastro de Marcadores
 
     setMap(initialMap);
   }, [datos, bus, position]);
@@ -167,8 +121,6 @@ export function BusesMapa({ dat }) {
   const handleButtonClick = () => {
     setShowMap(!showMap);
   };
-
-
 
   const handleMover = useCallback(() => {
     const newLon = position[0] + (Math.random() * 0.001 - 0.0005);
@@ -179,6 +131,20 @@ export function BusesMapa({ dat }) {
     setPosition(newPosition);
   }, [position]);
 
+  const handleMoverBusDT = (id) => {
+    MoverBus(busesURL, id, `latitud`, `longitud`, `placa_bus`, () => {
+      ListarBuses();
+      console.log("j " + distritosURL);
+
+      const newBusPosition = [bus.longitud, bus.latitud];
+
+      // Actualizar la posición del marcador en el mapa
+      const busActual = BusMarcador({ pos: newBusPosition });
+      markerLayerRef.current.getSource().removeFeature(busRef.current);
+      markerLayerRef.current.getSource().addFeature(busActual);
+      busRef.current = busActual;
+    });
+  };
 
   useEffect(() => {
     if (showMap && map === null) {
@@ -202,19 +168,15 @@ export function BusesMapa({ dat }) {
     }
   }, [positionsHistory, map]);
 
-
   return (
     <div className="container-registros">
       <h1>Mapa</h1>
-      {bus && bus.placa_bus && <h1>Placa {bus.placa_bus}</h1>}
-      {bus && bus.rutasModel && bus.rutasModel.id_ruta && (
-        <h1>RUTA {bus.rutasModel.id_ruta}</h1>
-      )}
+      <BusInfo bus={bus} activador={handleMoverBusDT} />
       <Button variant="warning">
         <Link to={'/listvehiculos'}>Atras</Link>
       </Button>
       <Button onClick={handleButtonClick}>Mostrar Mapa</Button>
-            <Button onClick={handleMover} variant="success">Mover</Button>
+      <Button onClick={handleMover} variant="success">Mover BF</Button>
       {showMap && <div ref={mapRef} className="mapa" />}
     </div>
   );

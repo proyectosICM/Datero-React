@@ -26,7 +26,7 @@ export function DistritoTabla({ url, abrir, cerrar }) {
         ListarDatos();
     }, [ListarDatos]);
 
-
+ 
 
     const agregarDistrito = (distrito) => {
         agregarElemento(distritosURL, distrito, closeModal, ListarDatos);

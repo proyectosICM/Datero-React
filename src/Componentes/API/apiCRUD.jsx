@@ -10,7 +10,7 @@ export function agregarElemento(url, requestData, closeModal, ListarDatos) {
     .catch((error) => {
       console.log(error);
     });
-}
+} 
 
 export function editarElemento(url, requestData, closeModal, ListarDatos) {
   axios
@@ -47,3 +47,34 @@ export function deshabilitarElemento(url, id, est, ListarDatos) {
 }
 
 
+export function MoverBus(url, id, lat, lon, pla, ListarDatos) {
+  const nurl = `${url}/${id}`;
+  axios.get(nurl).then((response) => {
+    const autobus = response.data;
+
+    const newLat = autobus[lat] + 0.0002003;
+    const newLon = autobus[lon] + 0.0002003;
+
+    autobus[lat] = newLat;
+    autobus[lon] = newLon;
+
+    autobus[pla] = 'A222A';
+    axios.put(nurl, autobus).then(() => {
+      ListarDatos();
+      console.log(autobus);
+    });
+  });
+}
+
+/*
+export function MoverBus(url, requestData, ListarDatos) {
+  axios
+    .put(url, requestData)
+    .then(() => {
+      ListarDatos();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+*/
