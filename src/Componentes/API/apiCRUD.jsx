@@ -1,4 +1,5 @@
 import axios from "axios";
+import { busesPosURL } from "./apiurls";
 
 export function agregarElemento(url, requestData, closeModal, ListarDatos) {
   axios
@@ -59,7 +60,8 @@ export function MoverBus(url, id, lat, lon, pla, ListarDatos) {
     autobus[lon] = newLon;
 
     autobus[pla] = 'A222A';
-    axios.put(nurl, autobus).then(() => {
+    const posedit = `${busesPosURL}/${id}`
+    axios.put(posedit, autobus).then(() => {
       ListarDatos();
     });
   });

@@ -5,6 +5,7 @@ const baseURL = "http://localhost:8080/api";
 
 //Buses
 export const busesURL = `${baseURL}/buses`;
+export const busesPosURL = `${baseURL}/buses/pos`;
 export const busesTURL = `${baseURL}/buses/busxempT`;
 export const busesHURL = `${baseURL}/buses/busxempH/1`;
 export const busesDURL = `${baseURL}/buses/busxempH/0`;
