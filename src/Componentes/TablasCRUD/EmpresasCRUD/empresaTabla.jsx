@@ -3,17 +3,17 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { EmpresaModal } from "./empresaModal";
 
-
-export function EmpresasT(){
+ 
+export function EmpresasTabla({url, abrir, cerrar}){
     const [datos,setDatos] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [datosEdit,setDatosEdit] = useState(null);
 
     const ListarDatos = useCallback(async() => {
-        const results = await axios.get('http://localhost:8080/api/empresa');
+        const results = await axios.get(url);
         setDatos(results.data);
-    },[]);
-
+    },[url]);
+ 
     useEffect(() => {
         ListarDatos();
     }, [ListarDatos]);
@@ -38,6 +38,7 @@ export function EmpresasT(){
         })
     };
 
+
     const habilitarEmpresa = (id) => {
         axios
           .get(`http://localhost:8080/api/empresa/${id}`)
@@ -51,6 +52,7 @@ export function EmpresasT(){
               });
           });
       };
+
 
     const deshabilitarEmpresa = (id) => {
         axios
@@ -71,18 +73,15 @@ export function EmpresasT(){
         setShowModal(true);
     };
 
-    const openModal = () => {
-        setShowModal(true);
-    };
 
     const closeModal = () => {
+        cerrar();
         setShowModal(false);
-    };
-
+        setDatosEdit(null); // Agregar esta línea
+      };
 
     return(
         <>
-            <Button variant='success' onClick={openModal}>+</Button>
                 <Table striped bordered hover>
                     <thead>
                         <tr>
@@ -101,24 +100,22 @@ export function EmpresasT(){
                                 <td>
                                     <Button variant="success" onClick={() => edit(dato)}>Editar</Button>
                                     <Button
-                                    variant = {dato.est_emp ? "warning":"primary"}
-                                    onClick={()=> {
-                                        if(dato.est_emp){
-                                            deshabilitarEmpresa(dato.id_emp)
+                                    variant={dato.est_emp ? "warning" : "primary"}
+                                    onClick={() => {
+                                        if (dato.est_emp) {
+                                            deshabilitarEmpresa(dato.id_emp);
                                         } else {
-                                            habilitarEmpresa(dato.id_emp)
+                                            habilitarEmpresa(dato.id_emp);
                                         }
                                     }}
-                                    >
-                                       {dato.est_emp ? "Deshabilitar" : "Habilitar"}
-                                    </Button>
+                                >{dato.est_emp ? "Deshabilitar" : "Habilitar"}</Button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </Table>
                 <EmpresaModal 
-                    show={showModal}
+                    show={showModal || abrir}
                     close={closeModal}
                     agregar={agregarEmpresa}
                     datosaeditar={datosEdit}

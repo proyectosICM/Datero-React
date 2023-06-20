@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 
-export function DistritoModal({show, close,datosaeditar,editar,agregar}){
+export function DistritoModal({show, close, datosaeditar, editar, agregar}){
 
     const [formData,setFormData] = useState({
         nom_dis: "",
@@ -15,7 +15,7 @@ export function DistritoModal({show, close,datosaeditar,editar,agregar}){
             limpiar();
         }
     },[datosaeditar])
-
+ 
     const handleSubmit = (event) => {
         event.preventDefault();
         if(datosaeditar){

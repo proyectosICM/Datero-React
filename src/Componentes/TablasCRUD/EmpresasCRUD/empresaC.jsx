@@ -1,9 +1,8 @@
 import React, {  useState } from "react";
-import { Button} from "react-bootstrap";
-import { EmpresasT } from "./empresasT";
-import { EmpresasH } from "./empresasH";
-import { EmpresasD } from "./empresasD";
 import { BotonesCRUD } from "../../Common/botonesCRUD";
+import { empresasDURL, empresasHURL, empresasURL } from "../../API/apiurls";
+import { EmpresasTabla } from "./empresaTabla";
+
 
 export function EmpresasC(){
 
@@ -24,6 +23,11 @@ export function EmpresasC(){
         }
     }
 
+    const handleCerrarModal = () => {
+        if(abrir){
+            setAbrir(false);
+        }
+    }
 
     return (
 
@@ -35,13 +39,13 @@ export function EmpresasC(){
                 {mostrartabla && (
                     <>
                         {tablaSeleccionada === "Habilitados" && (
-                            <EmpresasH />
+                            <EmpresasTabla url={empresasHURL} abrir={abrir} cerrar={handleCerrarModal}/>
                         )}
                         {tablaSeleccionada === "Deshabilitados" && (
-                            <EmpresasD />
+                            <EmpresasTabla url={empresasDURL} abrir={abrir} cerrar={handleCerrarModal} />
                         )}
                         {tablaSeleccionada === "Todos" && (
-                            <EmpresasT />
+                            <EmpresasTabla url={empresasURL}  abrir={abrir} cerrar={handleCerrarModal}/>
                         )}
                     </>
 

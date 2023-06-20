@@ -15,9 +15,9 @@ export const distritosHURL = `${baseURL}/distritos/disH/1`;
 export const distritosDURL = `${baseURL}/distritos/disH/0`;
 
 //Empresas
-export const empresasURL = `${baseURL}/empresas`;
-export const empresasHURL = `${baseURL}/empresas/disH/1`;
-export const empresasDURL = `${baseURL}/empresas/disH/0`;
+export const empresasURL = `${baseURL}/empresa`;
+export const empresasHURL = `${baseURL}/empresa/empresasH/1`;
+export const empresasDURL = `${baseURL}/empresa/empresasH/0`;
 
 //Paraderos
 export const paraderosURL = `${baseURL}/paraderos`;

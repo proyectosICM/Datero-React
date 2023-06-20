@@ -4,7 +4,7 @@ import {  BsBuildingsFill } from 'react-icons/bs';
 import { AiOutlineClose } from 'react-icons/ai';
 import './empresaModal.css';
 
-export function EmpresaModal({ show, close, agregar, datosaeditar, editar }) {
+export function EmpresaModal({ show, close, datosaeditar, editar, agregar }) {
   const [formData, setFormData] = useState({
     nom_emp: "",
     est_emp: true
@@ -12,11 +12,16 @@ export function EmpresaModal({ show, close, agregar, datosaeditar, editar }) {
 
   useEffect(() => {
     if (datosaeditar) {
+      console.log(datosaeditar)
       setFormData(datosaeditar);
     } else {
       limpiar();
     }
   }, [datosaeditar]);
+
+  const limpiar = () => {
+    setFormData({ nom_emp: "", est_emp: true });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -29,12 +34,15 @@ export function EmpresaModal({ show, close, agregar, datosaeditar, editar }) {
     limpiar();
   };
 
-  const limpiar = () => {
-    setFormData({ nom_emp: "", est_emp: true });
+  const handleClose = () => {
+    if (datosaeditar) {
+      limpiar();
+    }
+    close();
   };
 
   return (
-    <Modal show={show} onHide={close} centered>
+    <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>
           {datosaeditar ? "Editar Empresa" : "Agregar Empresa"}
@@ -60,7 +68,7 @@ export function EmpresaModal({ show, close, agregar, datosaeditar, editar }) {
             <Button type="submit" variant="success" className="modal-button modal-button-primary">
               {datosaeditar ? "Guardar Cambios" : "Crear Empresa"}
             </Button>
-            <Button variant="secondary" className="modal-button modal-button-close" onClick={close}>
+            <Button variant="secondary" className="modal-button modal-button-close" onClick={handleClose}>
               <AiOutlineClose />
               Cerrar
             </Button>
