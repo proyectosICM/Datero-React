@@ -1,9 +1,12 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { TrabajadorModal } from "./trabajadorModal";
+import { BotonesDeGestion } from "../../Common/botonesDeGestion";
+import { agregarElemento, deshabilitarElemento, editarElemento, habilitarElemento } from "../../API/apiCRUD";
+import { trabajadorURL } from "../../API/apiurls";
 
-export function TrabajadorTabla({url, il}){
+export function TrabajadorTabla({ url, il, abrir, cerrar }) {
 
     const [datos, setDatos] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -12,13 +15,13 @@ export function TrabajadorTabla({url, il}){
     const ListarDatos = useCallback(async () => {
         const results = await axios.get(url);
         setDatos(results.data);
-    },[url]);
+    }, [url]);
 
     useEffect(() => {
         ListarDatos();
-    },[ListarDatos]);
+    }, [ListarDatos]);
 
-    const agregarTrabajador = (trabajador) => { 
+    const agregarTrabajador = (trabajador) => {
         const requestData = {
             nom_tra: trabajador.nom_tra,
             ape_tra: trabajador.ape_tra,
@@ -26,77 +29,41 @@ export function TrabajadorTabla({url, il}){
             user_tra: trabajador.user_tra,
             pass_tra: trabajador.pass_tra,
             empresasModel: {
-              id_emp: il
-            },
-            rolesModel: {
-                id_rol: trabajador.rolesModel
-            },
-            est_tra: trabajador.est_tra
-          };
-        axios.post('http://localhost:8080/api/trabajadores', requestData)
-        .then(()=>{
-            closeModal();
-            ListarDatos();
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-    };
-
-    const editarTrabajador = (trabajador) => {
-        console.log(trabajador);
-        const requestData = {
-            nom_tra: trabajador.nom_tra,
-            ape_tra: trabajador.ape_tra,
-            dni_tra: trabajador.dni_tra,
-            user_tra: trabajador.user_tra,
-            pass_tra: trabajador.pass_tra,
-            empresasModel: {
-              id_emp: il
+                id_emp: il
             },
             rolesModel: {
                 id_rol: trabajador.rolesModel
             },
             est_tra: trabajador.est_tra
         };
-        console.log(requestData);
-        axios.put(`http://localhost:8080/api/trabajadores/${trabajador.id_tra}`, requestData)
-        .then(()=>{
-            closeModal();
-            ListarDatos();
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+        agregarElemento(trabajadorURL, requestData, closeModal, ListarDatos);
+    };
+
+    const editarTrabajador = (trabajador) => {
+        const requestData = {
+            nom_tra: trabajador.nom_tra,
+            ape_tra: trabajador.ape_tra,
+            dni_tra: trabajador.dni_tra,
+            user_tra: trabajador.user_tra,
+            pass_tra: trabajador.pass_tra,
+            empresasModel: {
+                id_emp: il
+            },
+            rolesModel: {
+                id_rol: trabajador.rolesModel
+            },
+            est_tra: trabajador.est_tra
+        };
+        const apiurledit = `${trabajadorURL}/${trabajador.id_tra}`;
+        editarElemento(apiurledit, requestData, closeModal, ListarDatos);
     };
 
     const habilitarTrabajador = (id) => {
-        axios
-            .get(`http://localhost:8080/api/trabajadores/${id}`)
-            .then((response) => {
-                const trabajador = response.data;
-                trabajador.est_tra = true;
-                
-                axios
-                    .put(`http://localhost:8080/api/trabajadores/${id}`, trabajador)
-                    .then(() => {
-                        ListarDatos();
-                    });
-            })
+        habilitarElemento(trabajadorURL, id, `est_tra`, ListarDatos);
     };
 
     const deshabilitarTrabajador = (id) => {
-        axios
-            .get(`http://localhost:8080/api/trabajadores/${id}`)
-            .then((response) => {
-                const trabajador = response.data;
-                trabajador.est_tra = false;
-                axios
-                    .put(`http://localhost:8080/api/trabajadores/${id}`, trabajador)
-                    .then(() => {
-                        ListarDatos();
-                    });
-            })
+        deshabilitarElemento(trabajadorURL, id, `est_tra`, ListarDatos);
     };
 
 
@@ -106,17 +73,15 @@ export function TrabajadorTabla({url, il}){
         setShowModal(true);
     }
 
-    const openModal = () => {
-        setShowModal(true);
-    };
 
     const closeModal = () => {
+        cerrar();
         setShowModal(false);
+        setDatosEdit(null);
     };
 
-    return(
+    return (
         <>
-            <Button variant="success" onClick={openModal}> + </Button>
             <Table striped bordered hover>
                 <thead>
                     <tr>
@@ -143,26 +108,17 @@ export function TrabajadorTabla({url, il}){
                             <td>{dato.rolesModel.nom_rol}</td>
                             <td>{dato.est_tra ? "Habilitado" : "Deshabilitado"}</td>
                             <td>
-                                <Button variant="success" onClick={() => edit(dato)}>Editar</Button>
-                                <Button
-                                    variant={dato.est_tra ? "warning" : "primary"}
-                                    onClick={() => {
-                                        if (dato.est_tra) {
-                                            deshabilitarTrabajador(dato.id_tra);
-                                        } else {
-                                            habilitarTrabajador(dato.id_tra);
-                                        }
-                                    }}
-                                >
-                                    {dato.est_tra ? "Deshabilitar" : "Habilitar"}
-                                </Button>
+                                <BotonesDeGestion
+                                    ide={`id_tra`} estado={`est_tra`} dato={dato} edit={edit}
+                                    deshabilitar={deshabilitarTrabajador} habilitar={habilitarTrabajador}
+                                />
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </Table>
             <TrabajadorModal
-                show={showModal}
+                show={showModal || abrir}
                 close={closeModal}
                 agregar={agregarTrabajador}
                 datosaeditar={datosEdit}

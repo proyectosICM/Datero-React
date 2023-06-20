@@ -6,16 +6,11 @@ import XYZ from 'ol/source/XYZ';
 import { fromLonLat } from 'ol/proj';
 import { Vector as VectorLayer } from 'ol/layer';
 import { Vector as VectorSource } from 'ol/source';
-import { Feature } from 'ol';
-import { Point, LineString } from 'ol/geom';
-import Icon from 'ol/style/Icon';
-import Style from 'ol/style/Style';
-import CircleStyle from 'ol/style/Circle';
+import { LineString } from 'ol/geom';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import { Stroke, Text } from 'ol/style';
 import axios from "axios";
-import { busesURL, distritosURL } from '../../../API/apiurls';
+import { busesURL } from '../../../API/apiurls';
 import BusInfo from './busInfo';
 import { BusMarcador, ParaderoMarcador, RastroMarcadores } from './Marcadores';
 import { MoverBus } from '../../../API/apiCRUD';
@@ -52,10 +47,6 @@ export function BusesMapa({ dat }) {
     ListarBuses();
     ListarDatos();
   }, [ListarBuses, ListarDatos]);
-
-  useEffect(() => {
-    console.log(bus);
-  }, [bus]);
 
   const createMap = useCallback(() => {
     const busPosition = [bus.longitud, bus.latitud];
@@ -134,10 +125,7 @@ export function BusesMapa({ dat }) {
   const handleMoverBusDT = (id) => {
     MoverBus(busesURL, id, `latitud`, `longitud`, `placa_bus`, () => {
       ListarBuses();
-      console.log("j " + distritosURL);
-
       const newBusPosition = [bus.longitud, bus.latitud];
-
       // Actualizar la posición del marcador en el mapa
       const busActual = BusMarcador({ pos: newBusPosition });
       markerLayerRef.current.getSource().removeFeature(busRef.current);
@@ -150,7 +138,7 @@ export function BusesMapa({ dat }) {
     if (showMap && map === null) {
       createMap();
       handleMover();
-      console.log('mapa creado');
+      //console.log('mapa creado');
     }
   }, [showMap, map, createMap, handleMover]);
 

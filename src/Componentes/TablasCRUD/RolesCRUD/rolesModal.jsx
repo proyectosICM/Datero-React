@@ -30,11 +30,17 @@ export function RolesModal({show, close,datosaeditar,editar,agregar}){
     const limpiar = () =>{
         setFormData({ nom_rol: "", est_rol: true });
     }
-
+ 
+    const handleClose = () => {
+        if (datosaeditar) {
+          limpiar();
+        }
+        close();
+      };
 
     return(
         <div>
-            <Modal show={show} onHide={close}>
+            <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Agregar Ruta</Modal.Title>
                 </Modal.Header>
@@ -49,7 +55,7 @@ export function RolesModal({show, close,datosaeditar,editar,agregar}){
                             onChange={(e) => setFormData({ ...formData, nom_rol: e.target.value })}
                         />
                         <Button type="submit">Crear</Button>
-                        <Button variant="secondary" onClick={close}>Cerrar</Button>
+                        <Button variant="secondary" onClick={handleClose}>Cerrar</Button>
                     </Form>
             
                 </Modal.Body>

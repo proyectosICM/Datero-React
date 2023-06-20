@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { DistritoModal } from "./distritoModal";
 import {
     agregarElemento,
@@ -9,7 +9,8 @@ import {
     deshabilitarElemento,
 } from '../../API/apiCRUD';
 
-import {distritosURL} from '../../API/apiurls';
+import { distritosURL } from '../../API/apiurls';
+import { BotonesDeGestion } from "../../Common/botonesDeGestion";
 
 export function DistritoTabla({ url, abrir, cerrar }) {
 
@@ -26,7 +27,7 @@ export function DistritoTabla({ url, abrir, cerrar }) {
         ListarDatos();
     }, [ListarDatos]);
 
- 
+
 
     const agregarDistrito = (distrito) => {
         agregarElemento(distritosURL, distrito, closeModal, ListarDatos);
@@ -54,6 +55,7 @@ export function DistritoTabla({ url, abrir, cerrar }) {
     const closeModal = () => {
         cerrar();
         setShowModal(false);
+        setDatosEdit(null);
     };
 
     return (
@@ -74,19 +76,10 @@ export function DistritoTabla({ url, abrir, cerrar }) {
                             <td>{dato.nom_dis}</td>
                             <td>{dato.est_dis ? "Habilitado" : "Deshabilitado"}</td>
                             <td>
-                                <Button variant="success" onClick={() => edit(dato)} >Editar</Button>
-                                <Button
-                                    variant={dato.est_dis ? "warning" : "primary"}
-                                    onClick={() => {
-                                        if (dato.est_dis) {
-                                            deshabilitardistrito(dato.id_dis);
-                                        } else {
-                                            habilitardistrito(dato.id_dis);
-                                        }
-                                    }}
-                                >
-                                    {dato.est_dis ? "Deshabilitar" : "Habilitar"}
-                                </Button>
+                                <BotonesDeGestion
+                                    ide={`id_dis`} estado={`est_dis`} dato={dato} edit={edit}
+                                    deshabilitar={deshabilitardistrito} habilitar={habilitardistrito}
+                                />
                             </td>
                         </tr>
                     ))}

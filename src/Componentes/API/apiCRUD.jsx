@@ -61,20 +61,7 @@ export function MoverBus(url, id, lat, lon, pla, ListarDatos) {
     autobus[pla] = 'A222A';
     axios.put(nurl, autobus).then(() => {
       ListarDatos();
-      console.log(autobus);
     });
   });
 }
-
-/*
-export function MoverBus(url, requestData, ListarDatos) {
-  axios
-    .put(url, requestData)
-    .then(() => {
-      ListarDatos();
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
-*/
+ 

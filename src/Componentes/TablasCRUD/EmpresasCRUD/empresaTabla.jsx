@@ -1,74 +1,46 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { EmpresaModal } from "./empresaModal";
+import { BotonesDeGestion } from "../../Common/botonesDeGestion";
+import { empresasURL } from "../../API/apiurls";
+import { agregarElemento, deshabilitarElemento, editarElemento, habilitarElemento } from "../../API/apiCRUD";
 
- 
-export function EmpresasTabla({url, abrir, cerrar}){
-    const [datos,setDatos] = useState([]);
+
+export function EmpresasTabla({ url, abrir, cerrar }) {
+    const [datos, setDatos] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    const [datosEdit,setDatosEdit] = useState(null);
+    const [datosEdit, setDatosEdit] = useState(null);
 
-    const ListarDatos = useCallback(async() => {
+    const ListarDatos = useCallback(async () => {
         const results = await axios.get(url);
         setDatos(results.data);
-    },[url]);
- 
+    }, [url]);
+
     useEffect(() => {
         ListarDatos();
     }, [ListarDatos]);
 
     const agregarEmpresa = (empresa) => {
-        axios.post('http://localhost:8080/api/empresa', empresa)
-        .then(()=>{
-            closeModal();
-            ListarDatos();
-        })
+        agregarElemento(empresasURL, empresa, closeModal, ListarDatos);
     };
 
     const editarEmpresa = (empresa) => {
-        console.log(empresa)
-        axios.put(`http://localhost:8080/api/empresa/${empresa.id_emp}`, empresa)
-        .then(()=>{
-            closeModal();
-            ListarDatos();
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+        const apiurledit = `${empresasURL}/${empresa.id_emp}`;
+        editarElemento(apiurledit, empresa, closeModal, ListarDatos);
     };
 
 
     const habilitarEmpresa = (id) => {
-        axios
-          .get(`http://localhost:8080/api/empresa/${id}`)
-          .then((response) => {
-            const empresa = response.data;
-            empresa.est_emp = true;
-            axios
-              .put(`http://localhost:8080/api/empresa/${id}`, empresa)
-              .then(() => {
-                ListarDatos();
-              });
-          });
-      };
+        habilitarElemento(empresasURL, id, `est_emp`, ListarDatos);
+    };
 
 
     const deshabilitarEmpresa = (id) => {
-        axios
-          .get(`http://localhost:8080/api/empresa/${id}`)
-          .then((response) => {
-            const empresa = response.data;
-            empresa.est_emp = false;
-            axios
-              .put(`http://localhost:8080/api/empresa/${id}`, empresa)
-              .then(() => {
-                ListarDatos();
-              });
-          });
-      };
+        deshabilitarElemento(empresasURL, id, `est_emp`, ListarDatos);
+    };
 
-    const edit = (empresa) =>{
+    const edit = (empresa) => {
         setDatosEdit(empresa);
         setShowModal(true);
     };
@@ -77,50 +49,43 @@ export function EmpresasTabla({url, abrir, cerrar}){
     const closeModal = () => {
         cerrar();
         setShowModal(false);
-        setDatosEdit(null); // Agregar esta línea
-      };
-
-    return(
+        setDatosEdit(null);
+    };
+ 
+    return (
         <>
-                <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>NOMBRE</th>
-                            <th>ESTADO</th>
-                            <th>GESTION</th>
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>NOMBRE</th>
+                        <th>ESTADO</th>
+                        <th>GESTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {datos.map((dato) => (
+                        <tr key={dato.id_emp}>
+                            <td>{dato.id_emp}</td>
+                            <td>{dato.nom_emp}</td>
+                            <td>{dato.est_emp ? "Habilitado" : "Deshabilitado"}</td>
+                            <td>
+                                <BotonesDeGestion
+                                    ide={`id_emp`} estado={`est_emp`} dato={dato} edit={edit}
+                                    deshabilitar={deshabilitarEmpresa} habilitar={habilitarEmpresa}
+                                />
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {datos.map((dato) => (
-                            <tr key={dato.id_emp}>
-                                <td>{dato.id_emp}</td>
-                                <td>{dato.nom_emp}</td>
-                                <td>{dato.est_emp ? "Habilitado" : "Deshabilitado"}</td>
-                                <td>
-                                    <Button variant="success" onClick={() => edit(dato)}>Editar</Button>
-                                    <Button
-                                    variant={dato.est_emp ? "warning" : "primary"}
-                                    onClick={() => {
-                                        if (dato.est_emp) {
-                                            deshabilitarEmpresa(dato.id_emp);
-                                        } else {
-                                            habilitarEmpresa(dato.id_emp);
-                                        }
-                                    }}
-                                >{dato.est_emp ? "Deshabilitar" : "Habilitar"}</Button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </Table>
-                <EmpresaModal 
-                    show={showModal || abrir}
-                    close={closeModal}
-                    agregar={agregarEmpresa}
-                    datosaeditar={datosEdit}
-                    editar={editarEmpresa}
-                />
+                    ))}
+                </tbody>
+            </Table>
+            <EmpresaModal
+                show={showModal || abrir}
+                close={closeModal}
+                agregar={agregarEmpresa}
+                datosaeditar={datosEdit}
+                editar={editarEmpresa}
+            />
         </>
     )
 }

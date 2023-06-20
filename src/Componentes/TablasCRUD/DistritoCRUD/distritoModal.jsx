@@ -31,10 +31,17 @@ export function DistritoModal({show, close, datosaeditar, editar, agregar}){
         setFormData({ nom_dis: "", est_dis: true });
     }
 
+    const handleClose = () => {
+        if (datosaeditar) {
+          limpiar();
+        }
+        close();
+      };
+    
  
     return(
         <div>
-            <Modal show={show} onHide={close}>
+            <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Agregar Empresa</Modal.Title>
                 </Modal.Header>
@@ -49,7 +56,7 @@ export function DistritoModal({show, close, datosaeditar, editar, agregar}){
                             onChange={(e) => setFormData({ ...formData, nom_dis: e.target.value })}
                         />
                         <Button type="submit">Crear</Button>
-                        <Button variant="secondary" onClick={close}>Cerrar</Button>
+                        <Button variant="secondary" onClick={handleClose}>Cerrar</Button>
                     </Form>
 
                 </Modal.Body>

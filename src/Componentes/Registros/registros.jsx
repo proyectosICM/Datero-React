@@ -17,7 +17,7 @@ export function Registros(){
                     placeholder="ABC-000"
                 />
             </div>
-
+ 
             <RegistrosTabla />
         </div>
     );

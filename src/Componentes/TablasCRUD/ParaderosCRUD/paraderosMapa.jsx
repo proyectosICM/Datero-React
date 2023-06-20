@@ -12,7 +12,7 @@ import { Point } from 'ol/geom';
 import Icon from 'ol/style/Icon';
 import Style from 'ol/style/Style';
 import Fill from 'ol/style/Fill';
-import { Stroke, Text } from 'ol/style';
+import { Text } from 'ol/style';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 

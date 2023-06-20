@@ -53,15 +53,24 @@ export function ParaderosModal({ show, close, datosaeditar, editar, agregar, il 
         close();
         limpiar();
     }
-
+ 
     const limpiar = () => {
         setFormData({ nom_par: "", est_par: true, distritosModel: null, longitud: "", latitud: "" });
         setEditando(false);
     }
 
+    
+  const handleClose = () => {
+    if (datosaeditar) {
+      limpiar();
+    }
+    close();
+  };
+
+
     return (
         <div>
-            <Modal show={show} onHide={close}>
+            <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title><SiGooglemaps />Agregar paradero</Modal.Title>
                 </Modal.Header>
@@ -133,7 +142,7 @@ export function ParaderosModal({ show, close, datosaeditar, editar, agregar, il 
 
 
                         <Button type="submit">Crear</Button>
-                        <Button onClick={close}>Cerrar</Button>
+                        <Button onClick={handleClose}>Cerrar</Button>
                     </Form>
                 </Modal.Body>
             </Modal>

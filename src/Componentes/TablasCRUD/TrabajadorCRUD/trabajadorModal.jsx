@@ -63,12 +63,11 @@ export function TrabajadorModal({
       limpiar();
     } else {
       agregar(formData);
-      console.log(datosaeditar);
     }
     close();
     limpiar();
   };
-
+ 
   const limpiar = () => {
     setFormData({
       nom_tra: "",
@@ -83,9 +82,17 @@ export function TrabajadorModal({
     setEditando(false);
   };
 
+
+  const handleClose = () => {
+    if (datosaeditar) {
+      limpiar();
+    }
+    close();
+  };
+
   return (
     <div>
-      <Modal show={show} onHide={close} centered>
+      <Modal show={show} onHide={handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>
             {editando ? "Editar Trabajador" : "Agregar Trabajador"}
@@ -210,7 +217,7 @@ export function TrabajadorModal({
               <Button type="submit">
                 {editando ? "Guardar cambios" : "Crear"}
               </Button>
-              <Button onClick={close} variant='secondary'>
+              <Button onClick={handleClose} variant='secondary'>
                 <BsX className="button-icon" />
                 Cerrar
               </Button>

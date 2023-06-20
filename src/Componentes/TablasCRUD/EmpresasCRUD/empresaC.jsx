@@ -22,7 +22,7 @@ export function EmpresasC(){
             setAbrir(false);
         }
     }
-
+ 
     const handleCerrarModal = () => {
         if(abrir){
             setAbrir(false);
@@ -33,7 +33,7 @@ export function EmpresasC(){
 
             <div className="container-crud" >
             <div className="set-botones">
-                <BotonesCRUD activador={handleMostrarTabla} btnTabla={tablaSeleccionada} abrir={handleAbrirModal} />
+                <BotonesCRUD activador={handleMostrarTabla} btnTabla={tablaSeleccionada} abrir={handleAbrirModal}  retroceder="/menuCRUD" />
             </div>
 
                 {mostrartabla && (
@@ -42,7 +42,7 @@ export function EmpresasC(){
                             <EmpresasTabla url={empresasHURL} abrir={abrir} cerrar={handleCerrarModal}/>
                         )}
                         {tablaSeleccionada === "Deshabilitados" && (
-                            <EmpresasTabla url={empresasDURL} abrir={abrir} cerrar={handleCerrarModal} />
+                            <EmpresasTabla url={empresasDURL} abrir={abrir} cerrar={handleCerrarModal}/>
                         )}
                         {tablaSeleccionada === "Todos" && (
                             <EmpresasTabla url={empresasURL}  abrir={abrir} cerrar={handleCerrarModal}/>

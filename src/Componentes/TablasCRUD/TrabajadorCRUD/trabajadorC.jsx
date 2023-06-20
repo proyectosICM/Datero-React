@@ -1,58 +1,52 @@
 import React, { useState } from "react";
 import { TrabajadorTabla } from "./trabajadorTabla";
 import { useParams } from "react-router-dom";
-import { Button, ButtonGroup } from "react-bootstrap";
-import { BsCheck, BsX, BsPeopleFill } from 'react-icons/bs';
 import './trabajadorC.css';
+import { BotonesCRUD } from "../../Common/botonesCRUD";
+import { trabajadorDURL, trabajadorHURL, trabajadorTURL } from "../../API/apiurls";
 
 export function TrabajadorC() {
   const { id_emp } = useParams();
-  const urlT = `http://localhost:8080/api/trabajadores/trabajadoresxEmpT/${id_emp}`;
-  const urlH = `http://localhost:8080/api/trabajadores/trabajadoresxEmpH/${id_emp}/1`;
-  const urlD = `http://localhost:8080/api/trabajadores/trabajadoresxEmpH/${id_emp}/0`;
-
+  const [abrir, setAbrir] = useState(false);
   const [tablaSeleccionada, setTablaSeleccionada] = useState("Todos");
+
+  const urlT = `${trabajadorTURL}/${id_emp}`;
+  const urlH = `${trabajadorHURL}/${id_emp}`;
+  const urlD = `${trabajadorDURL}/${id_emp}`;
+
 
   const handleMostrarTabla = (tabla) => {
     setTablaSeleccionada(tabla);
   };
 
+
+
+  const handleAbrirModal = () => {
+    if (!abrir) {
+      setAbrir(true);
+    } else {
+      setAbrir(false);
+    }
+  }
+
+  const handleCerrarModal = () => {
+    if (abrir) {
+      setAbrir(false);
+    }
+  }
+ 
   return (
     <div className="container-crud">
-      <ButtonGroup className="tabla-buttons">
-        <Button
-          variant="primary"
-          onClick={() => handleMostrarTabla("Habilitados")}
-          className={tablaSeleccionada === "Habilitados" ? "active" : ""}
-        >
-          <BsCheck className="button-icon" />
-          Habilitados
-        </Button>
-        <Button
-          variant="primary"
-          onClick={() => handleMostrarTabla("Deshabilitados")}
-          className={tablaSeleccionada === "Deshabilitados" ? "active" : ""}
-        >
-          <BsX className="button-icon" />
-          Deshabilitados
-        </Button>
-        <Button
-          variant="primary"
-          onClick={() => handleMostrarTabla("Todos")}
-          className={tablaSeleccionada === "Todos" ? "active" : ""}
-        >
-          <BsPeopleFill className="button-icon" />
-          Todos
-        </Button>
-      </ButtonGroup>
+      <BotonesCRUD activador={handleMostrarTabla} btnTabla={tablaSeleccionada} abrir={handleAbrirModal} retroceder="/trabajadoresCRUD" />
+
       {tablaSeleccionada === "Habilitados" && (
-        <TrabajadorTabla il={id_emp} url={urlH} />
+        <TrabajadorTabla il={id_emp} url={urlH} abrir={abrir} cerrar={handleCerrarModal} />
       )}
       {tablaSeleccionada === "Deshabilitados" && (
-        <TrabajadorTabla il={id_emp} url={urlD} />
+        <TrabajadorTabla il={id_emp} url={urlD} abrir={abrir} cerrar={handleCerrarModal} />
       )}
       {tablaSeleccionada === "Todos" && (
-        <TrabajadorTabla il={id_emp} url={urlT} />
+        <TrabajadorTabla il={id_emp} url={urlT} abrir={abrir} cerrar={handleCerrarModal} />
       )}
     </div>
   );

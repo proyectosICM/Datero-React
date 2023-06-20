@@ -12,7 +12,6 @@ export function EmpresaModal({ show, close, datosaeditar, editar, agregar }) {
 
   useEffect(() => {
     if (datosaeditar) {
-      console.log(datosaeditar)
       setFormData(datosaeditar);
     } else {
       limpiar();

@@ -1,10 +1,9 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Form, FormGroup, Modal } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import { BsFillBusFrontFill } from "react-icons/bs";
-import { FaMapSigns, FaTruck, FaUser } from "react-icons/fa";
-import { TfiCreditCard } from "react-icons/tfi";
-import { InputSimple, PruebaInp, SelectCruzado, SelectCruzado2 } from "../../BarraNav/forms";
+import { FaUser } from "react-icons/fa";
+import { InputSimple, SelectCruzado } from "../../BarraNav/forms";
 
 
 export function BusesModal({ show, close, datosaeditar, editar, agregar, emp }) {
@@ -67,11 +66,9 @@ export function BusesModal({ show, close, datosaeditar, editar, agregar, emp }) 
                 updatedFormData.trabajadoresModel = updatedFormData.trabajadoresModel.id_tra;
             }
             editar(updatedFormData);
-            console.log(datosaeditar);
             limpiar();
         } else {
             agregar(formData);
-            console.log(datosaeditar);
         }
         close();
         limpiar();
@@ -83,10 +80,19 @@ export function BusesModal({ show, close, datosaeditar, editar, agregar, emp }) 
         setEditando(false);
     }
 
+    
+
+  const handleClose = () => {
+    if (datosaeditar) {
+      limpiar();
+    }
+    close();
+  };
+
 
     return (
         <div>
-            <Modal show={show} onHide={close}>
+            <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title><BsFillBusFrontFill /> Agregar Buses</Modal.Title>
                 </Modal.Header>
@@ -146,7 +152,7 @@ export function BusesModal({ show, close, datosaeditar, editar, agregar, emp }) 
 
 
                         <Button type="submit">Crear</Button>
-                        <Button onClick={close}>Cerrar</Button>
+                        <Button onClick={handleClose}>Cerrar</Button>
                     </Form>
                 </Modal.Body>
             </Modal>

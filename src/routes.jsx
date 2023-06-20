@@ -22,8 +22,10 @@ import { ParaderoXRutaTabla } from './Componentes/TablasCRUD/ParaderosXRuta/para
 import { BusesMapa } from './Componentes/TablasCRUD/BusesCRUD/BusesMapa/busesMapa';
 
 export const routes = [
+  
   { path: '/', component: <Inicio /> },
   { path: '/login', component: <Login /> },
+
   { path: '/listvehiculos', component: <ListadoVehiculos /> },
   { path: '/monitoreo', component: <Monitoreo /> },
   { path: '/prueba2', component: <Prueba2 /> },

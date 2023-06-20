@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { RolesModal } from "./rolesModal";
+import { BotonesDeGestion } from "../../Common/botonesDeGestion";
 
-export function RolesTabla({ url }) {
+export function RolesTabla({ url, abrir, cerrar }) {
 
     const [datos, setDatos] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -42,7 +43,7 @@ export function RolesTabla({ url }) {
     };
 
 
-    const habilitardistrito = (id) => {
+    const habilitarrol = (id) => {
         axios
             .get(`http://localhost:8080/api/roles/${id}`)
             .then((response) => {
@@ -56,7 +57,7 @@ export function RolesTabla({ url }) {
             })
     };
 
-    const deshabilitardistrito = (id) => {
+    const deshabilitarrol = (id) => {
         axios
             .get(`http://localhost:8080/api/roles/${id}`)
             .then((response) => {
@@ -75,18 +76,15 @@ export function RolesTabla({ url }) {
         setShowModal(true);
     }
 
-    const openModal = () => {
-        setShowModal(true);
-    };
-
     const closeModal = () => {
         setShowModal(false);
+        cerrar();
+        setDatosEdit(null);
     };
 
 
     return (
-        <div className="container-crud">
-            <Button variant="success" onClick={openModal}> + </Button>
+        <>
             <Table striped bordered hover>
                 <thead>
                     <tr>
@@ -103,31 +101,22 @@ export function RolesTabla({ url }) {
                             <td>{dato.nom_rol}</td>
                             <td>{dato.est_rol ? "Habilitada" : "Deshabilitada"}</td>
                             <td>
-                                <Button variant="success" onClick={() => edit(dato)} >Editar</Button>
-                                <Button
-                                    variant={dato.est_rol ? "warning" : "primary"}
-                                    onClick={() => {
-                                        if (dato.est_rol) {
-                                            deshabilitardistrito(dato.id_rol);
-                                        } else {
-                                            habilitardistrito(dato.id_rol);
-                                        }
-                                    }}
-                                >
-                                    {dato.est_rol ? "Deshabilitar" : "Habilitar"}
-                                </Button>
+                                <BotonesDeGestion
+                                    ide={`id_rol`} estado={`est_rol`} dato={dato} edit={edit}
+                                    deshabilitar={deshabilitarrol} habilitar={habilitarrol}
+                                />
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </Table>
             <RolesModal
-                show={showModal}
+                show={showModal || abrir}
                 close={closeModal}
                 agregar={agregarDistrito}
                 datosaeditar={datosEdit}
                 editar={editarDistritos}
             />
-        </div>
+        </>
     );
 }

@@ -1,22 +1,22 @@
 import React, { useState } from "react";
-import { Button } from "react-bootstrap";
 import { ParaderosTabla } from "./ParaderosTabla";
 import { BotonesCRUD } from "../../Common/botonesCRUD";
+import { paraderosDURL, paraderosHURL, paraderosURL } from "../../API/apiurls";
 
 export function ParaderosC(){
 
     const [abrir, setAbrir] = useState()
     const [tablaSeleccionada, setTablaSeleccionada] = useState("Habilitados");
-    const urlT = ("http://localhost:8080/api/paraderos");
-    const urlH = (`http://localhost:8080/api/paraderos/parH/1`);
-    const urlD = (`http://localhost:8080/api/paraderos/parH/0`);
+    const urlT = paraderosURL;
+    const urlH = paraderosHURL;
+    const urlD = paraderosDURL;
 
     const handleMostrarTabla = (tabla) =>{
         setTablaSeleccionada(tabla);
     }
-
+ 
     const handleAbrirModal = () => {
-        if(!abrir){
+        if(!abrir){ 
             setAbrir(true);
         } else {
             setAbrir(false);
@@ -32,17 +32,17 @@ export function ParaderosC(){
     return(
         <div className="container-crud">
             <div className="set-botones">
-                <BotonesCRUD activador={handleMostrarTabla} btnTabla={tablaSeleccionada} abrir={handleAbrirModal} />
+                <BotonesCRUD activador={handleMostrarTabla} btnTabla={tablaSeleccionada} abrir={handleAbrirModal} retroceder="/menuCRUD" />
             </div>
 
             {tablaSeleccionada === "Habilitados" && (
                 <ParaderosTabla url={urlH} abrir={abrir} cerrar={handleCerrarModal}/>
             )}
             {tablaSeleccionada === "Deshabilitados" && (
-                <ParaderosTabla url={urlD} />
+                <ParaderosTabla url={urlD} abrir={abrir} cerrar={handleCerrarModal}/>
             )}
             {tablaSeleccionada === "Todos" && (
-                <ParaderosTabla url={urlT} />
+                <ParaderosTabla url={urlT} abrir={abrir} cerrar={handleCerrarModal}/>
             )}
         </div>
     );

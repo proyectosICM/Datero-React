@@ -1,26 +1,27 @@
 import axios from "axios";
 import React, { useCallback, useState } from "react";
 import { useEffect } from "react";
-import { Button, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { BusesModal } from "./busesModal";
 import { busesURL } from "../../API/apiurls";
 import { agregarElemento, deshabilitarElemento, editarElemento, habilitarElemento } from "../../API/apiCRUD";
+import { BotonesDeGestion } from "../../Common/botonesDeGestion";
 
 
-export function BusesTabla({il, url}) {
+export function BusesTabla({ il, url, abrir, cerrar }) {
 
     const [datos, setDatos] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [datosEdit, setDatosEdit] = useState(null);
-    
-    const ListarDatos = useCallback(async()=>{
+
+    const ListarDatos = useCallback(async () => {
         const results = await axios.get(url);
         setDatos(results.data);
-    },[url]);
+    }, [url]);
 
-    useEffect(()=> {
+    useEffect(() => {
         ListarDatos();
-    },[ListarDatos]);
+    }, [ListarDatos]);
 
     const agregarBus = (bus) => {
         console.log(bus);
@@ -29,15 +30,15 @@ export function BusesTabla({il, url}) {
             placa_bus: bus.placa_bus,
             est_bus: bus.est_bus,
             trabajadoresModel: {
-              id_tra: bus.trabajadoresModel
+                id_tra: bus.trabajadoresModel
             },
             empresasModel: {
-              id_emp: il
+                id_emp: il
             },
             rutasModel: {
-              id_ruta: bus.rutasModel
+                id_ruta: bus.rutasModel
             }
-          };
+        };
 
         agregarElemento(busesURL, requestData, closeModal, ListarDatos);
     };
@@ -48,15 +49,15 @@ export function BusesTabla({il, url}) {
             placa_bus: bus.placa_bus,
             est_bus: bus.est_bus,
             trabajadoresModel: {
-              id_tra: bus.trabajadoresModel
+                id_tra: bus.trabajadoresModel
             },
             empresasModel: {
-              id_emp: il
+                id_emp: il
             },
             rutasModel: {
-              id_ruta: bus.rutasModel
+                id_ruta: bus.rutasModel
             }
-          };
+        };
         const apiurledit = `${busesURL}/${bus.id_bus}`;
         editarElemento(apiurledit, requestData, closeModal, ListarDatos);
     };
@@ -74,17 +75,15 @@ export function BusesTabla({il, url}) {
         setShowModal(true);
     }
 
-    const openModal = () => {
-        setShowModal(true);
-    };
 
     const closeModal = () => {
+        cerrar();
         setShowModal(false);
+        setDatosEdit(null);
     };
 
     return (
         <>
-            <Button variant="success" onClick={openModal}> + </Button>
             <Table striped bordered hover>
                 <thead>
                     <tr>
@@ -107,29 +106,20 @@ export function BusesTabla({il, url}) {
                             <td>{dato.mod_bus}</td>
                             <td>{dato.trabajadoresModel.nom_tra}  {dato.trabajadoresModel.ape_tra}</td>
                             <td>{dato.empresasModel.nom_emp}</td>
-                            <td>{dato.est_bus ? "Habilitado":"Deshabilitado"}</td>
+                            <td>{dato.est_bus ? "Habilitado" : "Deshabilitado"}</td>
                             <td>
-                                    <Button variant="success" onClick={()=> edit(dato)}>Editar</Button>
-                                    <Button
-                                    variant = {dato.est_bus ? "warning":"primary"}
-                                    onClick={()=> {
-                                        if(dato.est_bus){
-                                            deshabilitarBus(dato.id_bus);
-                                        } else {
-                                            habilitarBus(dato.id_bus);
-                                        }
-                                    }}
-                                    >
-                                       {dato.est_bus ? "Deshabilitar" : "Habilitar"}
-                                    </Button>
-                                </td>
-                        </tr> 
+                                <BotonesDeGestion
+                                    ide={`id_bus`} estado={`est_bus`} dato={dato} edit={edit}
+                                    deshabilitar={deshabilitarBus} habilitar={habilitarBus}
+                                />
+                            </td>
+                        </tr>
                     ))}
                 </tbody>
-            </Table>
+            </Table >
             <BusesModal
                 emp={il}
-                show={showModal}
+                show={showModal || abrir}
                 close={closeModal}
                 agregar={agregarBus}
                 datosaeditar={datosEdit}
@@ -137,4 +127,4 @@ export function BusesTabla({il, url}) {
             />
         </>
     );
-}
+} 

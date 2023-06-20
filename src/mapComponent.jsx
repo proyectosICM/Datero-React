@@ -11,8 +11,7 @@ import { Feature } from 'ol';
 import { Point, LineString } from 'ol/geom';
 import Icon from 'ol/style/Icon';
 import Style from 'ol/style/Style';
-import Fill from 'ol/style/Fill';
-import { Stroke, Text } from 'ol/style';
+import { Stroke  } from 'ol/style';
 import { Button } from 'react-bootstrap';
 
 const vec = [-76.9577902, -12.0371043];
@@ -47,16 +46,7 @@ export function MapComponent() {
       source: new VectorSource(),
     });
     initialMap.addLayer(markerLayer);
-    /*
-        const textStyle = new Style({
-          text: new Text({
-            text: 'Título del marcador',
-            offsetY: -15,
-            textAlign: 'center',
-            fill: new Fill({ color: '#000000' }),
-            font: '12px sans-serif', // Establecer la propiedad font directamente
-          }),
-        });*/
+
 
     const vecinoStyle = new Style({
       image: new Icon({
@@ -114,7 +104,7 @@ export function MapComponent() {
     if (showMap && map === null) {
       createMap();
       handleMover();
-      console.log('mapa creado');
+      //console.log('mapa creado');
     }
   }, [showMap, map, createMap, handleMover]);
 

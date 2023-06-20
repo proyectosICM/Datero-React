@@ -6,13 +6,20 @@ const baseURL = "http://localhost:8080/api";
 //Buses
 export const busesURL = `${baseURL}/buses`;
 export const busesTURL = `${baseURL}/buses/busxempT`;
-export const busesHURL = `${baseURL}/buses/busxempH`;
-export const busesDURL = `${baseURL}/buses/busxempD`;
+export const busesHURL = `${baseURL}/buses/busxempH/1`;
+export const busesDURL = `${baseURL}/buses/busxempH/0`;
 
 //Distritos
 export const distritosURL = `${baseURL}/distritos`;
 export const distritosHURL = `${baseURL}/distritos/disH/1`;
 export const distritosDURL = `${baseURL}/distritos/disH/0`;
+
+
+//Distritos
+export const trabajadorURL = `${baseURL}/trabajadores`;
+export const trabajadorTURL = `${baseURL}/trabajadores/trabajadoresxEmpT`;
+export const trabajadorHURL = `${baseURL}/trabajadores/trabajadoresxEmpH/1`;
+export const trabajadorDURL = `${baseURL}/trabajadores/trabajadoresxEmpH/0`;
 
 //Empresas
 export const empresasURL = `${baseURL}/empresa`;
@@ -21,9 +28,9 @@ export const empresasDURL = `${baseURL}/empresa/empresasH/0`;
 
 //Paraderos
 export const paraderosURL = `${baseURL}/paraderos`;
-export const paraderosHURL = `${baseURL}/paraderos/disH/1`;
-export const paraderosDURL = `${baseURL}/paraderos/disH/0`;
-
+export const paraderosHURL = `${baseURL}/paraderos/parH/1`;
+export const paraderosDURL = `${baseURL}/paraderos/parH/0`;
+ 
 //Roles
 export const rolesURL = `${baseURL}/roles`;
 export const rolesHURL = `${baseURL}/roles/disH/1`;

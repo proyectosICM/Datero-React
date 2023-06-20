@@ -31,11 +31,11 @@ export function DistritoC(){
             setAbrir(false);
         }
     }
-
+ 
     return(
         <div className="container-crud">
             <div className="set-botones">
-                <BotonesCRUD activador={handleMostrarTabla} btnTabla={tablaSeleccionada} abrir={handleAbrirModal} />
+                <BotonesCRUD activador={handleMostrarTabla} btnTabla={tablaSeleccionada} abrir={handleAbrirModal} retroceder="/menuCRUD" />
             </div>
 
             {tablaSeleccionada === "Habilitados" && (

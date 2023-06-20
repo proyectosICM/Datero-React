@@ -4,8 +4,9 @@ import { Button, Table } from "react-bootstrap";
 import { ParaderosModal } from "./paraderosModal";
 import { SiGooglemaps } from 'react-icons/si';
 import { Link } from "react-router-dom";
+import { BotonesDeGestion } from "../../Common/botonesDeGestion";
 
-export function ParaderosTabla({ url, abrir, cerrar  }) {
+export function ParaderosTabla({ url, abrir, cerrar }) {
 
     const [datos, setDatos] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -26,13 +27,12 @@ export function ParaderosTabla({ url, abrir, cerrar  }) {
             nom_par: paradero.nom_par,
             est_par: paradero.est_par,
             distritosModel: {
-              id_dis: paradero.distritosModel
+                id_dis: paradero.distritosModel
             },
             longitud: paradero.longitud,
             latitud: paradero.latitud
-          };
-          console.log(requestData);
-          axios.post('http://localhost:8080/api/paraderos', requestData)
+        };
+        axios.post('http://localhost:8080/api/paraderos', requestData)
             .then(() => {
                 closeModal();
                 ListarDatos();
@@ -47,13 +47,12 @@ export function ParaderosTabla({ url, abrir, cerrar  }) {
             nom_par: paradero.nom_par,
             est_par: paradero.est_par,
             distritosModel: {
-              id_dis: paradero.distritosModel
+                id_dis: paradero.distritosModel
             },
             longitud: paradero.longitud,
             latitud: paradero.latitud
-          };
-          console.log(requestData);
-          axios.put(`http://localhost:8080/api/paraderos/${paradero.id_par}`, requestData)
+        };
+        axios.put(`http://localhost:8080/api/paraderos/${paradero.id_par}`, requestData)
             .then(() => {
                 closeModal();
                 ListarDatos();
@@ -100,6 +99,7 @@ export function ParaderosTabla({ url, abrir, cerrar  }) {
     const closeModal = () => {
         setShowModal(false);
         cerrar();
+        setDatosEdit(null);
     };
 
     return (
@@ -124,24 +124,15 @@ export function ParaderosTabla({ url, abrir, cerrar  }) {
                             <td>{dato.latitud} {dato.latitud & dato.longitud ? "," : "No hay coordenadas registradas"} {dato.longitud}  </td>
                             <td>{dato.est_par ? "Habilitado" : "Deshabilitado"}</td>
                             <td>
-                                <Button variant="success" onClick={() => edit(dato)} >Editar</Button>
-                                <Button
-                                    variant={dato.est_par ? "warning" : "primary"}
-                                    onClick={() => {
-                                        if (dato.est_par) {
-                                            deshabilitarparadero(dato.id_par);
-                                        } else {
-                                            habilitarparadero(dato.id_par);
-                                        }
-                                    }}
-                                >
-                                    {dato.est_par ? "Deshabilitar" : "Habilitar"}
-                                </Button>
+                                <BotonesDeGestion
+                                    ide={`id_par`} estado={`est_par`} dato={dato} edit={edit}
+                                    deshabilitar={deshabilitarparadero} habilitar={habilitarparadero}
+                                />
                                 <Button variant="info">
                                     <Link to={`/paraderoxmap/${dato.nom_par}/${dato.longitud}/${dato.latitud}`}>
                                         <SiGooglemaps />Ver en el mapa
                                     </Link>
- 
+
                                 </Button>
                             </td>
                         </tr>
