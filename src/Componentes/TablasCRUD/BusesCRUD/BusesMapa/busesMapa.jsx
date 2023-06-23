@@ -9,7 +9,7 @@ import { Vector as VectorSource } from 'ol/source';
 import { LineString } from 'ol/geom';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import axios from "axios";
+import axios from 'axios';
 import { busesURL } from '../../../API/apiurls';
 import BusInfo from './busInfo';
 import { BusMarcador, ParaderoMarcador, RastroMarcadores } from './Marcadores';
@@ -17,7 +17,7 @@ import { MoverBus } from '../../../API/apiCRUD';
 
 export function BusesMapa({ dat }) {
   const { dts, rt } = useParams();
-  const vec = [-76.973094400000000, -12.062200700000000];
+  const vec = [-76.9730944, -12.0622007];
 
   const [bus, setBus] = useState(null);
   const [datos, setDatos] = useState([]);
@@ -27,16 +27,25 @@ export function BusesMapa({ dat }) {
   const markerRef = useRef(null);
   const lineRef = useRef(null);
   const busRef = useRef(null);
-  const markerLayerRef = useRef(null); // Nueva referencia para el markerLayer
+  const markerLayerRef = useRef(null);
 
   const ListarBuses = useCallback(async () => {
-    const response = await axios.get(`${busesURL}/${dts}`);
-    setBus(response.data);
-  }, [dts]);
+    try {
+      const response = await axios.get(`${busesURL}/${dts}`);
+      setBus(response.data);
+      console.log(bus);
+    } catch (error) {
+      // Manejo de errores
+    }
+  }, [dts,bus]);
 
   const ListarDatos = useCallback(async () => {
-    const results = await axios.get(`http://localhost:8080/api/rp/rxp/${rt}`);
-    setDatos(results.data);
+    try {
+      const results = await axios.get(`http://localhost:8080/api/rp/rxp/${rt}`);
+      setDatos(results.data);
+    } catch (error) {
+      // Manejo de errores
+    }
   }, [rt]);
 
   const mapRef = useRef(null);
@@ -72,18 +81,15 @@ export function BusesMapa({ dat }) {
     });
 
     initialMap.addLayer(markerLayer);
-    markerLayerRef.current = markerLayer; // Asignar markerLayer a la referencia
+    markerLayerRef.current = markerLayer;
 
-    //Inicio de Rutas
     datos.forEach((dato) => {
       const { longitud, latitud } = dato.paraderosModel;
 
       const paraderoMarcador = ParaderoMarcador({ pos: [longitud, latitud] });
       markerLayer.getSource().addFeature(paraderoMarcador);
     });
-    //Fin de Rutas
 
-    //Inicio Buses Marcadores
     const busMarcador = BusMarcador({ pos: position });
     markerLayer.getSource().addFeature(busMarcador);
 
@@ -92,19 +98,16 @@ export function BusesMapa({ dat }) {
 
     markerRef.current = busMarcador;
     busRef.current = busActual;
-    //Fin Buses Marcadores
 
-    //Rastro de Marcadores
     const lineSource = new VectorSource();
     const lineLayer = new VectorLayer({
       source: lineSource,
     });
     initialMap.addLayer(lineLayer);
- 
+
     const rastrobusprueba = RastroMarcadores();
     lineSource.addFeature(rastrobusprueba);
     lineRef.current = rastrobusprueba;
-    //Fin de Rastro de Marcadores
 
     setMap(initialMap);
   }, [datos, bus, position]);
@@ -118,15 +121,14 @@ export function BusesMapa({ dat }) {
     const newLat = position[1] + (Math.random() * 0.001 - 0.0005);
     const newPosition = [newLon, newLat];
 
-    setPositionsHistory(prevHistory => [...prevHistory, newPosition]);
+    setPositionsHistory((prevHistory) => [...prevHistory, newPosition]);
     setPosition(newPosition);
   }, [position]);
 
   const handleMoverBusDT = (id) => {
-    MoverBus(busesURL, id, `latitud`, `longitud`, `placa_bus`, () => {
+    MoverBus(busesURL, id, 'latitud', 'longitud', 'placa_bus', () => {
       ListarBuses();
       const newBusPosition = [bus.longitud, bus.latitud];
-      // Actualizar la posición del marcador en el mapa
       const busActual = BusMarcador({ pos: newBusPosition });
       markerLayerRef.current.getSource().removeFeature(busRef.current);
       markerLayerRef.current.getSource().addFeature(busActual);
@@ -135,12 +137,37 @@ export function BusesMapa({ dat }) {
   };
 
   useEffect(() => {
+    let intervalId = null;
+
+    const fetchBusPosition = async () => {
+      try {
+        ListarBuses();
+      } catch (error) {
+        // Manejo de errores
+      }
+    };
+
     if (showMap && map === null) {
       createMap();
       handleMover();
-      //console.log('mapa creado');
+
+      intervalId = setInterval(fetchBusPosition, 1000);
     }
-  }, [showMap, map, createMap, handleMover]);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [showMap, map, createMap, handleMover, dts, ListarBuses]);
+
+  useEffect(() => {
+    if (map !== null) {
+      const newBusPosition = [bus.longitud, bus.latitud];
+      const busActual = BusMarcador({ pos: newBusPosition });
+      markerLayerRef.current.getSource().removeFeature(busRef.current);
+      markerLayerRef.current.getSource().addFeature(busActual);
+      busRef.current = busActual;
+    }
+  }, [bus, map]);
 
   useEffect(() => {
     if (markerRef.current && map !== null) {
@@ -150,7 +177,7 @@ export function BusesMapa({ dat }) {
 
   useEffect(() => {
     if (lineRef.current && map !== null) {
-      const coordinates = positionsHistory.map(pos => fromLonLat(pos));
+      const coordinates = positionsHistory.map((pos) => fromLonLat(pos));
       const lineGeometry = new LineString(coordinates);
       lineRef.current.setGeometry(lineGeometry);
     }
@@ -164,7 +191,9 @@ export function BusesMapa({ dat }) {
         <Link to={'/listvehiculos'}>Atras</Link>
       </Button>
       <Button onClick={handleButtonClick}>Mostrar Mapa</Button>
-      <Button onClick={handleMover} variant="success">Mover BF</Button>
+      <Button onClick={handleMover} variant="success">
+        Mover BF
+      </Button>
       {showMap && <div ref={mapRef} className="mapa" />}
     </div>
   );
