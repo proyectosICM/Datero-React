@@ -33,11 +33,11 @@ export function BusesMapa({ dat }) {
     try {
       const response = await axios.get(`${busesURL}/${dts}`);
       setBus(response.data);
-      console.log(bus);
+      bus();
     } catch (error) {
       // Manejo de errores
     }
-  }, [dts,bus]);
+  }, [dts, bus]);
 
   const ListarDatos = useCallback(async () => {
     try {
