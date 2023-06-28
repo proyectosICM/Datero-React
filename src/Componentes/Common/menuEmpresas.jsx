@@ -3,13 +3,14 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import './menuEmpresas.css';
+import { empresasHURL } from "../API/apiurls";
 
 export function MenuEmpresas({ ruta }) {
     const [datos, setDatos] = useState([]);
 
     const ListarDatos = useCallback(async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/empresa/habilitadas');
+            const response = await axios.get(`${empresasHURL}`);
             setDatos(response.data);
         } catch (error) {
             console.log(error);
