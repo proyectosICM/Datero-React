@@ -1,6 +1,6 @@
 // URL base común
-//const baseURL = "http://localhost:8080/api";
-const baseURL = "http://181.224.251.187:8081/api";
+const baseURL = "http://localhost:8080/api";
+//const baseURL = "http://181.224.251.187:8081/api";
 //const baseURL = "http://192.168.0.214:8081/api";
 
 // Rutas específicas
@@ -11,6 +11,7 @@ export const busesPosURL = `${baseURL}/buses/pos`;
 export const busesTURL = `${baseURL}/buses/busxempT`;
 export const busesHURL = `${baseURL}/buses/busxempH/1`;
 export const busesDURL = `${baseURL}/buses/busxempH/0`;
+export const busesListado = `${baseURL}/buses/vista`;
 
 //Distritos
 export const distritosURL = `${baseURL}/distritos`;

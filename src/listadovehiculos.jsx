@@ -5,12 +5,13 @@ import { FaMapMarkerAlt, FaTruck, FaUser, FaMapSigns } from "react-icons/fa";
 import { BsBuildingsFill, BsBusFront } from "react-icons/bs";
 import { TfiCreditCard } from "react-icons/tfi";
 import { Link } from "react-router-dom";
+import { busesListado } from "./Componentes/API/apiurls";
 
 export function ListadoVehiculos() {
   const [datos, setDatos] = useState([]);
 
   const ListDatos = useCallback(async () => {
-    const results = await axios.get("http://localhost:8080/api/buses/vista");
+    const results = await axios.get(`${busesListado}`);
     setDatos(results.data);
   }, []);
 
